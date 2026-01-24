@@ -1,2 +1,4 @@
 dist
 node_modules
+nodes/VRChat/vrchat.node copy
+credentials/VRChatAPI.credentials copy

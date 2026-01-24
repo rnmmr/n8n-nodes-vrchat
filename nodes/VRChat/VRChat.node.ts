@@ -4,11 +4,11 @@ export class VRChat implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'VRChat',
 		name: 'VRChat',
-		icon: 'file:../icons/vrchat-app.svg',
+		icon: 'file:vrchat-app.svg',
 		group: ['transform'],
 		version: 1,
-		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-		description: '123',
+		subtitle: '={{$parameter["function"]}}',//'={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+		description: '456',
 		defaults: {
 			name: 'VRChat',
 		},
@@ -30,148 +30,115 @@ export class VRChat implements INodeType {
 		// Basic node details will go here
 		properties: [
 			{
-				displayName: 'Resource',
-				name: 'resource',
+				displayName: '方法',
+				name: 'function',
 				type: 'options',
-				noDataExpression: true,
 				options: [
 					{
-						name: 'Astronomy Picture of the Day',
-						value: 'astronomyPictureOfTheDay',
-					},
-					{
-						name: 'Mars Rover Photos',
-						value: 'marsRoverPhotos',
-					},
-				],
-				default: 'astronomyPictureOfTheDay',
-			},
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: {
-					show: {
-						resource: ['astronomyPictureOfTheDay'],
-					},
-				},
-				options: [
-					{
-						name: 'Get',
-						value: 'get',
-						action: 'Get the APOD',
-						description: 'Get the Astronomy Picture of the day',
-						routing: {
+						name: '获取本人信息',
+						value: '获取本人信息',
+                        routing: {
 							request: {
 								method: 'GET',
-								url: '/planetary/apod',
+								url: '/auth/user',
 							},
 						},
 					},
-				],
-				default: 'get',
-			},
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: {
-					show: {
-						resource: ['marsRoverPhotos'],
-					},
-				},
-				options: [
 					{
-						name: 'Get',
-						value: 'get',
-						action: 'Get Mars Rover photos',
-						description: 'Get photos from the Mars Rover',
-						routing: {
+						name: '搜索玩家',
+						value: '搜索玩家',
+                        routing: {
 							request: {
 								method: 'GET',
+								url: '=/users',
 							},
 						},
 					},
-				],
-				default: 'get',
-			},
-			{
-				displayName: 'Rover name',
-				description: 'Choose which Mars Rover to get a photo from',
-				required: true,
-				name: 'roverName',
-				type: 'options',
-				options: [
-					{ name: 'Curiosity', value: 'curiosity' },
-					{ name: 'Opportunity', value: 'opportunity' },
-					{ name: 'Perseverance', value: 'perseverance' },
-					{ name: 'Spirit', value: 'spirit' },
-				],
-				routing: {
-					request: {
-						url: '=/mars-photos/api/v1/rovers/{{$value}}/photos',
+                    {
+						name: '获取玩家信息',
+						value: '获取玩家信息',
 					},
-				},
-				default: 'curiosity',
+				],
+				default: '获取本人信息',
+			},
+			// 搜索玩家
+			{
+				displayName: '玩家名字',
+				name: 'UserName',
+				type: 'string',
+				placeholder: '名字',
 				displayOptions: {
 					show: {
-						resource: ['marsRoverPhotos'],
-					},
-				},
-			},
-			{
-				displayName: 'Date',
-				description: 'Earth date',
-				required: true,
-				name: 'marsRoverDate',
-				type: 'dateTime',
-				default: '',
-				displayOptions: {
-					show: {
-						resource: ['marsRoverPhotos'],
+						function: ['搜索玩家'],
 					},
 				},
 				routing: {
 					request: {
-						// You've already set up the URL. qs appends the value of the field as a query string
 						qs: {
-							earth_date: '={{ new Date($value).toISOString().substr(0,10) }}',
-						},
+							search: '={{$value}}',
+						}
+					},
+				},
+				default: '',
+			},
+			// 获取玩家信息
+            {
+				displayName: '玩家UserID',
+				name: 'UserID',
+				type: 'string',
+				placeholder: 'usr_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
+				displayOptions: {
+					show: {
+						function: ['获取玩家信息'],
+					},
+				},
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/users/{{$value}}',
+					},
+				},
+				default: '',
+			},
+			// 通用参数
+			{
+				displayName: '结果数量',
+				name: 'n',
+				type: 'string',
+				placeholder: '60',
+				default: '60',
+				displayOptions: {
+					show: {
+						function: ['搜索玩家'],
+					},
+				},
+				routing: {
+					request: {
+						qs: {
+							n: '={{$value}}',
+						}
 					},
 				},
 			},
 			{
-				displayName: 'Additional Fields',
-				name: 'additionalFields',
-				type: 'collection',
-				default: {},
-				placeholder: 'Add Field',
+				displayName: '偏移量',
+				name: 'offset',
+				type: 'string',
+				placeholder: '0',
+				default: '0',
 				displayOptions: {
 					show: {
-						resource: ['astronomyPictureOfTheDay'],
-						operation: ['get'],
+						function: ['搜索玩家'],
 					},
 				},
-				options: [
-					{
-						displayName: 'Date',
-						name: 'apodDate',
-						type: 'dateTime',
-						default: '',
-						routing: {
-							request: {
-								// You've already set up the URL. qs appends the value of the field as a query string
-								qs: {
-									date: '={{ new Date($value).toISOString().substr(0,10) }}',
-								},
-							},
-						},
+				routing: {
+					request: {
+						qs: {
+							offset: '={{$value}}',
+						}
 					},
-				],
+				},
 			},
-			// Resources and operations will go here
 		],
 	};
 }
