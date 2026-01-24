@@ -1,4 +1,5 @@
 import { INodeType, INodeTypeDescription } from 'n8n-workflow';
+import { updateinfo } from './updateinfo';
 
 export class VRChat implements INodeType {
 	description: INodeTypeDescription = {
@@ -50,7 +51,7 @@ export class VRChat implements INodeType {
                         routing: {
 							request: {
 								method: 'GET',
-								url: '=/users',
+								url: '/users',
 							},
 						},
 					},
@@ -58,6 +59,34 @@ export class VRChat implements INodeType {
 						name: '获取玩家信息',
 						value: '获取玩家信息',
 					},
+					{
+						name: '获取通知',
+						value: '获取通知',
+                        routing: {
+							request: {
+								method: 'GET',
+								url: '/auth/user/notifications',
+							},
+						},
+					},
+					{
+						name: '修改本人信息',
+						value: '修改本人信息',
+						// routing: {
+						// 	request: {
+						// 		method: 'PUT',
+						// 		url: '/users',
+						// 	},
+						// },
+					},
+					{
+						name: '接受申请',
+						value: '接受申请',
+					},
+					// {
+					// 	name: '群组管理',
+					// 	value: '群组管理',
+					// },
 				],
 				default: '获取本人信息',
 			},
@@ -67,6 +96,7 @@ export class VRChat implements INodeType {
 				name: 'UserName',
 				type: 'string',
 				placeholder: '名字',
+				required: true,
 				displayOptions: {
 					show: {
 						function: ['搜索玩家'],
@@ -81,25 +111,6 @@ export class VRChat implements INodeType {
 				},
 				default: '',
 			},
-			// 获取玩家信息
-            {
-				displayName: '玩家UserID',
-				name: 'UserID',
-				type: 'string',
-				placeholder: 'usr_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
-				displayOptions: {
-					show: {
-						function: ['获取玩家信息'],
-					},
-				},
-				routing: {
-					request: {
-						method: 'GET',
-						url: '=/users/{{$value}}',
-					},
-				},
-				default: '',
-			},
 			// 通用参数
 			{
 				displayName: '结果数量',
@@ -109,7 +120,7 @@ export class VRChat implements INodeType {
 				default: '60',
 				displayOptions: {
 					show: {
-						function: ['搜索玩家'],
+						function: ['搜索玩家','获取通知'],
 					},
 				},
 				routing: {
@@ -128,7 +139,7 @@ export class VRChat implements INodeType {
 				default: '0',
 				displayOptions: {
 					show: {
-						function: ['搜索玩家'],
+						function: ['搜索玩家','获取通知'],
 					},
 				},
 				routing: {
@@ -138,6 +149,48 @@ export class VRChat implements INodeType {
 						}
 					},
 				},
+			},
+			// 获取玩家信息
+            {
+				displayName: '玩家UserID',
+				name: 'UserID',
+				type: 'string',
+				required: true,
+				placeholder: 'usr_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
+				displayOptions: {
+					show: {
+						function: ['获取玩家信息'],
+					},
+				},
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/users/{{$value}}',
+					},
+				},
+				default: '',
+			},
+			// 修改本人信息
+			...updateinfo,
+			// 接受申请
+			{
+				displayName: '申请ID',
+				name: 'frqId',
+				type: 'string',
+				required: true,
+				placeholder: 'frq_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
+				displayOptions: {
+					show: {
+						function: ['接受申请'],
+					},
+				},
+				routing: {
+					request: {
+						method: 'PUT',
+						url: '=/auth/user/notifications/{{$value}}/accept',
+					},
+				},
+				default: '',
 			},
 		],
 	};
