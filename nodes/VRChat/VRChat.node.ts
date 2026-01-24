@@ -1,4 +1,4 @@
-import { INodeType, INodeTypeDescription } from 'n8n-workflow';
+import { INodeType, INodeTypeDescription, IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
 import { updateinfo } from './updateinfo';
 
 export class VRChat implements INodeType {
@@ -9,7 +9,7 @@ export class VRChat implements INodeType {
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["function"]}}',//'={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-		description: '456',
+		description: 'VRChat API',
 		defaults: {
 			name: 'VRChat',
 		},
@@ -46,6 +46,16 @@ export class VRChat implements INodeType {
 						},
 					},
 					{
+						name: '修改本人信息',
+						value: '修改本人信息',
+						// routing: {
+						// 	request: {
+						// 		method: 'PUT',
+						// 		url: '/users',
+						// 	},
+						// },
+					},
+					{
 						name: '搜索玩家',
 						value: '搜索玩家',
                         routing: {
@@ -68,16 +78,6 @@ export class VRChat implements INodeType {
 								url: '/auth/user/notifications',
 							},
 						},
-					},
-					{
-						name: '修改本人信息',
-						value: '修改本人信息',
-						// routing: {
-						// 	request: {
-						// 		method: 'PUT',
-						// 		url: '/users',
-						// 	},
-						// },
 					},
 					{
 						name: '接受申请',
@@ -193,5 +193,7 @@ export class VRChat implements INodeType {
 				default: '',
 			},
 		],
+	// async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+	// }
 	};
 }
