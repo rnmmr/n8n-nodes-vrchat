@@ -30,8 +30,10 @@ This project is intended for **personal use and learning only**.
 
 ## Installation / 安装
 
-在[这里](https://github.com/rnmmr/n8n-nodes-vrchat/releases)下载最新的`n8n-nodes-vrchat.zip` 文件
-解压到 `C:\Users\你的用户名\.n8n\custom\node_modules`
+先[安装n8n](https://docs.n8n.io/hosting/)
+
+然后在[这里](https://github.com/rnmmr/n8n-nodes-vrchat/releases)下载最新的`n8n-nodes-vrchat.zip` 文件
+解压到 `C:\Users\你的用户名\.n8n\custom\node_modules` (一般是这个位置)
 > node_modules
 > └ n8n-nodes-vrchat
 
