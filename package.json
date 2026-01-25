@@ -8,12 +8,12 @@
 		"n8n-community-node-package"
 	],
 	"author": {
-		"name": "",
-		"email": ""
+		"name": "mmr",
+		"email": "a2356960576@163.com"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/<...>/n8n-nodes-<...>.git"
+		"url": "https://github.com/rnmmr/n8n-nodes-vrchat.git"
 	},
 	"scripts": {
 		"build": "n8n-node build",

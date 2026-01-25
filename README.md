@@ -30,10 +30,12 @@ This project is intended for **personal use and learning only**.
 
 ## Installation / 安装
 
-Follow the official n8n community node installation guide:  
-按照 n8n 官方社区节点安装文档进行安装：
+在[这里](https://github.com/rnmmr/n8n-nodes-vrchat/releases)下载最新的`n8n-nodes-vrchat.zip` 文件
+解压到 `C:\Users\你的用户名\.n8n\custom\node_modules`
+> node_modules
+> └ n8n-nodes-vrchat
 
-https://docs.n8n.io/integrations/community-nodes/installation/
+应该就行了吧（
 
 ---
 
@@ -95,4 +97,8 @@ This project is **not affiliated with VRChat Inc.**
 
 ## ToDo
 - [ ] 改回全英语
-- [x] 本地日志Trigger
+- [ ] 本地日志Trigger
+
+---
+
+累了，有问题再call我（
