@@ -1,8 +1,8 @@
 import {
 	INodeType,
 	INodeTypeDescription,
-	IExecuteFunctions,
-	INodeExecutionData,
+	//IExecuteFunctions,
+	//INodeExecutionData,
 } from 'n8n-workflow';
 import { updateinfo } from './updateinfo';
 
@@ -73,6 +73,22 @@ export class VRChat implements INodeType {
 					{
 						name: '获取玩家信息',
 						value: '获取玩家信息',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '=/users/{{$parameter["UserID"]}}',
+							},
+						},
+					},
+					{
+						name: '获取共同好友',
+						value: '获取共同好友',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '=/users/{{$parameter["UserID"]}}/mutuals/friends',
+							},
+						},
 					},
 					{
 						name: '获取通知',
@@ -120,46 +136,7 @@ export class VRChat implements INodeType {
 				},
 				default: '',
 			},
-			// 通用参数
-			{
-				displayName: '结果数量',
-				name: 'n',
-				type: 'string',
-				placeholder: '60',
-				default: '60',
-				displayOptions: {
-					show: {
-						function: ['搜索玩家', '获取通知'],
-					},
-				},
-				routing: {
-					request: {
-						qs: {
-							n: '={{$value}}',
-						},
-					},
-				},
-			},
-			{
-				displayName: '偏移量',
-				name: 'offset',
-				type: 'string',
-				placeholder: '0',
-				default: '0',
-				displayOptions: {
-					show: {
-						function: ['搜索玩家', '获取通知'],
-					},
-				},
-				routing: {
-					request: {
-						qs: {
-							offset: '={{$value}}',
-						},
-					},
-				},
-			},
-			// 获取玩家信息
+			// 获取玩家信息(爆改成通用参数了)
 			{
 				displayName: '玩家UserID',
 				name: 'UserID',
@@ -168,19 +145,14 @@ export class VRChat implements INodeType {
 				placeholder: 'usr_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
 				displayOptions: {
 					show: {
-						function: ['获取玩家信息'],
-					},
-				},
-				routing: {
-					request: {
-						method: 'GET',
-						url: '=/users/{{$value}}',
+						function: ['获取玩家信息','获取共同好友'],
 					},
 				},
 				default: '',
 			},
 			// 修改本人信息
 			...updateinfo,
+			// 获取共同好友
 			// 接受申请
 			{
 				displayName: '申请ID',
@@ -241,6 +213,45 @@ export class VRChat implements INodeType {
 							},
 						},
 						default: '',
+					},
+				],
+			},
+			// 通用参数
+			{
+				displayName: '结果参数',
+				name: '结果参数字段',
+				type: 'collection',
+				default: {},
+				placeholder: '添加结果参数字段',
+				displayOptions: { show: {function: ['搜索玩家', '获取通知', '获取共同好友']} },
+				options: [
+					{
+						displayName: '结果数量',
+						name: 'n',
+						type: 'string',
+						placeholder: '60',
+						default: '60',
+						routing: {
+							request: {
+								qs: {
+									n: '={{$value}}',
+								},
+							},
+						},
+					},
+					{
+						displayName: '偏移量',
+						name: 'offset',
+						type: 'string',
+						placeholder: '0',
+						default: '0',
+						routing: {
+							request: {
+								qs: {
+									offset: '={{$value}}',
+								},
+							},
+						},
 					},
 				],
 			},

@@ -19,6 +19,7 @@
 		"build": "n8n-node build",
 		"build:watch": "tsc --watch",
 		"dev": "n8n-node dev",
+		"dev:debug": "cross-env N8N_LOG_LEVEL=debug n8n-node dev",
 		"lint": "n8n-node lint",
 		"lint:fix": "n8n-node lint --fix",
 		"release": "n8n-node release",
@@ -40,6 +41,7 @@
 	"devDependencies": {
 		"@n8n/node-cli": "*",
 		"@types/ws": "^8.18.1",
+		"cross-env": "^10.1.0",
 		"eslint": "9.32.0",
 		"prettier": "3.6.2",
 		"release-it": "^19.0.4",

@@ -1,14 +1,8 @@
-import {
-	ITriggerFunctions,
-	INodeType,
-	INodeTypeDescription,
-	ITriggerResponse,
-} from 'n8n-workflow';
+import { ITriggerFunctions, INodeType, INodeTypeDescription, ITriggerResponse } from 'n8n-workflow';
 
 import WebSocket from 'ws';
 
 export class VRChatTrigger implements INodeType {
-
 	description: INodeTypeDescription = {
 		displayName: 'VRChat Trigger',
 		name: 'VrchatTrigger',
@@ -33,15 +27,16 @@ export class VRChatTrigger implements INodeType {
 				displayName: '触发事件',
 				name: 'wsevent',
 				type: 'multiOptions',
+				description: '不知道为什么换模也是 friend-location 事件，而且发来的数据里面也没有模型信息',
 				options: [
 					{ name: '好友上线', value: 'friend-online' },
 					{ name: '好友下线', value: 'friend-offline' },
-					{ name: '好友换房', value: 'friend-location' },
+					{ name: '好友换房/换模', value: 'friend-location' },
 					{ name: '好友信息变化', value: 'friend-update' },
 					{ name: '自己信息变化', value: 'user-update' },
 					{ name: '自己换房', value: 'user-location' },
-                    { name: '收到通知', value: 'notification' },
-                    { name: '其他', value: 'other' },
+					{ name: '收到通知', value: 'notification' },
+					{ name: '其他', value: 'other' },
 				],
 				default: [],
 			},
@@ -56,12 +51,15 @@ export class VRChatTrigger implements INodeType {
 	};
 
 	async trigger(this: ITriggerFunctions): Promise<ITriggerResponse> {
-
 		const credentials = await this.getCredentials('VRChatAPI');
 		const cookieValue = credentials.authcookie ? String((credentials as any).authcookie) : '';
 		const autoReconnect = this.getNodeParameter('autoReconnect') as boolean;
 		const rawWsevent = this.getNodeParameter('wsevent') as unknown;
-		const wsevent = Array.isArray(rawWsevent) ? (rawWsevent as string[]) : (rawWsevent ? [String(rawWsevent)] : []);
+		const wsevent = Array.isArray(rawWsevent)
+			? (rawWsevent as string[])
+			: rawWsevent
+				? [String(rawWsevent)]
+				: [];
 		this.logger.debug(wsevent.length ? wsevent.toString() : 'No event filter set');
 
 		let ws: WebSocket | undefined;
