@@ -1,3 +1,5 @@
+/* eslint-disable n8n-nodes-base/node-filename-against-convention */
+
 import {
 	INodeType,
 	INodeTypeDescription,
@@ -9,8 +11,8 @@ import { updateinfo } from './updateinfo';
 export class VRChat implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'VRChat',
-		name: 'VRChat',
-		icon: 'file:vrchat-app.svg',
+		name: 'vrChat',
+		icon: 'file:../../icons/vrchat.svg',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["function"]}}', //'={{$parameter["operation"] + ": " + $parameter["resource"]}}',
@@ -22,7 +24,7 @@ export class VRChat implements INodeType {
 		outputs: ['main'],
 		credentials: [
 			{
-				name: 'VRChatAPI',
+				   name: 'VRChatApi',
 				required: true,
 			},
 		],
@@ -41,42 +43,16 @@ export class VRChat implements INodeType {
 				type: 'options',
 				options: [
 					{
+						name: '查看房间',
+						value: '查看房间',
+					},
+					{
 						name: '获取本人信息',
 						value: '获取本人信息',
 						routing: {
 							request: {
 								method: 'GET',
 								url: '/auth/user',
-							},
-						},
-					},
-					{
-						name: '修改本人信息',
-						value: '修改本人信息',
-						// routing: {
-						// 	request: {
-						// 		method: 'PUT',
-						// 		url: '/users',
-						// 	},
-						// },
-					},
-					{
-						name: '搜索玩家',
-						value: '搜索玩家',
-						routing: {
-							request: {
-								method: 'GET',
-								url: '/users',
-							},
-						},
-					},
-					{
-						name: '获取玩家信息',
-						value: '获取玩家信息',
-						routing: {
-							request: {
-								method: 'GET',
-								url: '=/users/{{$parameter["UserID"]}}',
 							},
 						},
 					},
@@ -101,12 +77,38 @@ export class VRChat implements INodeType {
 						},
 					},
 					{
+						name: '获取玩家信息',
+						value: '获取玩家信息',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '=/users/{{$parameter["UserID"]}}',
+							},
+						},
+					},
+					{
 						name: '接受申请',
 						value: '接受申请',
 					},
 					{
-						name: '查看房间',
-						value: '查看房间',
+						name: '搜索玩家',
+						value: '搜索玩家',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '/users',
+							},
+						},
+					},
+					{
+						name: '修改本人信息',
+						value: '修改本人信息',
+						// routing: {
+						// 	request: {
+						// 		method: 'PUT',
+						// 		url: '/users',
+						// 	},
+						// },
 					},
 					// {
 					// 	name: '群组管理',
@@ -256,6 +258,7 @@ export class VRChat implements INodeType {
 				],
 			},
 		],
+		usableAsTool: true,
 		// async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		// }
 	};

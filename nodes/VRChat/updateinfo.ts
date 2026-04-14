@@ -33,23 +33,23 @@ export const updateinfo: INodeProperties[] = [
 				default: 'active',
 				options: [
 					{
-						name: 'active',
+						name: 'Active',
 						value: 'active',
 					},
 					{
-						name: 'join me',
-						value: 'join me',
-					},
-					{
-						name: 'ask me',
+						name: 'Ask Me',
 						value: 'ask me',
 					},
 					{
-						name: 'busy',
+						name: 'Busy',
 						value: 'busy',
 					},
 					{
-						name: 'offline(?)',
+						name: 'Join Me',
+						value: 'join me',
+					},
+					{
+						name: 'Offline(?)',
 						value: 'offline',
 					},
 				],

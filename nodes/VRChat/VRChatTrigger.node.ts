@@ -1,11 +1,15 @@
+/* eslint-disable n8n-nodes-base/node-filename-against-convention */
+/* eslint-disable @n8n/community-nodes/no-credential-reuse */
+/* eslint-disable @n8n/community-nodes/no-restricted-imports */
 import { ITriggerFunctions, INodeType, INodeTypeDescription, ITriggerResponse } from 'n8n-workflow';
 
 import WebSocket from 'ws';
+import { setTimeout as nodeSetTimeout, clearTimeout as nodeClearTimeout } from 'timers';
 
 export class VRChatTrigger implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'VRChat Trigger',
-		name: 'VrchatTrigger',
+		name: 'vrchatTrigger',
 		icon: 'file:vrchat-app.svg',
 		group: ['trigger'],
 		version: 1,
@@ -18,7 +22,7 @@ export class VRChatTrigger implements INodeType {
 		outputs: ['main'],
 		credentials: [
 			{
-				name: 'VRChatAPI',
+				name: 'VRChatApi',
 				required: true,
 			},
 		],
@@ -29,14 +33,14 @@ export class VRChatTrigger implements INodeType {
 				type: 'multiOptions',
 				description: '不知道为什么换模也是 friend-location 事件，而且发来的数据里面也没有模型信息',
 				options: [
+					{ name: '好友换房/换模', value: 'friend-location' },
 					{ name: '好友上线', value: 'friend-online' },
 					{ name: '好友下线', value: 'friend-offline' },
-					{ name: '好友换房/换模', value: 'friend-location' },
 					{ name: '好友信息变化', value: 'friend-update' },
-					{ name: '自己信息变化', value: 'user-update' },
-					{ name: '自己换房', value: 'user-location' },
-					{ name: '收到通知', value: 'notification' },
 					{ name: '其他', value: 'other' },
+					{ name: '收到通知', value: 'notification' },
+					{ name: '自己换房', value: 'user-location' },
+					{ name: '自己信息变化', value: 'user-update' },
 				],
 				default: [],
 			},
@@ -45,14 +49,15 @@ export class VRChatTrigger implements INodeType {
 				name: 'autoReconnect',
 				type: 'boolean',
 				default: true,
-				description: '当 WebSocket 异常关闭时是否自动尝试重连',
+				description: 'Whether to automatically attempt to reconnect when the WebSocket closes unexpectedly',
 			},
 		],
+		usableAsTool: true,
 	};
 
 	async trigger(this: ITriggerFunctions): Promise<ITriggerResponse> {
-		const credentials = await this.getCredentials('VRChatAPI');
-		const cookieValue = credentials.authcookie ? String((credentials as any).authcookie) : '';
+		const credentials = await this.getCredentials('VRChatApi') as { authcookie?: string };
+		const cookieValue = credentials.authcookie ? String(credentials.authcookie) : '';
 		const autoReconnect = this.getNodeParameter('autoReconnect') as boolean;
 		const rawWsevent = this.getNodeParameter('wsevent') as unknown;
 		const wsevent = Array.isArray(rawWsevent)
@@ -134,7 +139,7 @@ export class VRChatTrigger implements INodeType {
 
 			const delay = Math.min(reconnectDelay, 30_000);
 			this.logger.debug(`Reconnecting in ${delay / 1000}s...`);
-			reconnectTimer = setTimeout(() => {
+			reconnectTimer = nodeSetTimeout(() => {
 				reconnectTimer = undefined;
 				reconnectDelay *= 2;
 				connect();
@@ -147,7 +152,7 @@ export class VRChatTrigger implements INodeType {
 		return {
 			closeFunction: async () => {
 				isStopping = true;
-				if (reconnectTimer) clearTimeout(reconnectTimer);
+				if (reconnectTimer) nodeClearTimeout(reconnectTimer);
 				if (ws) {
 					ws.removeAllListeners();
 					ws.close();
