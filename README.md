@@ -32,8 +32,16 @@ This project is intended for **personal use and learning only**.
 
 先[安装n8n](https://docs.n8n.io/hosting/)
 
-然后在[这里](https://github.com/rnmmr/n8n-nodes-vrchat/releases)下载最新的`n8n-nodes-vrchat.zip` 文件
-解压到 `C:\Users\你的用户名\.n8n\custom\node_modules` (一般是这个位置)，像这样`node_modules\n8n-nodes-vrchat`
+
+然后再
+
+```bash
+npm install n8n-nodes-vrchat
+```
+
+如果你用的是 n8n desktop 或自建服务，进入 n8n 的 .n8n/custom/node_modules 目录下执行上面命令即可。
+
+如需手动安装，也可以在[这里](https://github.com/rnmmr/n8n-nodes-vrchat/releases)下载最新的 `n8n-nodes-vrchat.zip` 文件，解压到 `C:\Users\你的用户名\.n8n\custom\node_modules\n8n-nodes-vrchat`。
 
 应该就行了吧（
 

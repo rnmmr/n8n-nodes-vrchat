@@ -27,7 +27,7 @@
 	},
 	"files": [
 		"dist",
-		"node",
+		"nodes",
 		"credentials"
 	],
 	"n8n": {

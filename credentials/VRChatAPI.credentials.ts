@@ -1,3 +1,4 @@
+/* eslint-disable n8n-nodes-base/cred-filename-against-convention */
 /* eslint-disable @n8n/community-nodes/icon-validation */
 /* eslint-disable n8n-nodes-base/cred-class-field-name-uppercase-first-char */
 import {

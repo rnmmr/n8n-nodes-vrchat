@@ -1,5 +1,4 @@
 /* eslint-disable n8n-nodes-base/node-filename-against-convention */
-/* eslint-disable @n8n/community-nodes/no-credential-reuse */
 /* eslint-disable @n8n/community-nodes/no-restricted-imports */
 import { ITriggerFunctions, INodeType, INodeTypeDescription, ITriggerResponse } from 'n8n-workflow';
 
@@ -10,7 +9,7 @@ export class VRChatTrigger implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'VRChat Trigger',
 		name: 'vrchatTrigger',
-		icon: 'file:vrchat-app.svg',
+		icon: 'file:../../icons/vrchat.svg',
 		group: ['trigger'],
 		version: 1,
 		description: 'Triggers on VRChat events via WebSocket',
