@@ -2,7 +2,7 @@ import {
 	ICredentialType,
 	INodeProperties,
 	ICredentialTestRequest,
-	IAuthenticateGeneric
+	IAuthenticateGeneric,
 } from 'n8n-workflow';
 
 export class VRChatAPI implements ICredentialType {
@@ -19,6 +19,38 @@ export class VRChatAPI implements ICredentialType {
 			default: '',
 			placeholder: 'auth=xxxxxxxxxxxxxxxx',
 		},
+//		{
+//			displayName: 'Cookie Expires At',
+//			name: 'cookieExpiresAt',
+//			type: 'hidden',
+//			default: 0,
+//		},
+//		{
+//			displayName: 'Cookie Checked At',
+//			name: 'cookieCheckedAt',
+//			type: 'hidden',
+//			default: 0,
+//		},
+//		{
+//			displayName: 'Add Custom Headers',
+//			name: 'showheaders',
+//			type: 'boolean',
+//			default: 0,
+//		},
+//		{
+//			displayName: 'Custom Headers',
+//			name: 'headers',
+//			type: 'json',
+//			default: '',
+//			displayOptions: {
+//				show: {
+//					showheaders: [
+//						true,
+//					],
+//				},
+//			},
+//			placeholder: '{ "X-Custom-Header": "value" }',
+//		},
 	];
 	authenticate: IAuthenticateGeneric = {
 		type: 'generic',
@@ -29,6 +61,25 @@ export class VRChatAPI implements ICredentialType {
 			},
 		},
 	};
+
+	// authenticate = async (
+		// credentials: {
+			// authcookie?: string;
+			// cachedAuthCookie?: string;
+			// cookieExpiresAt?: number;
+			// cookieCheckedAt?: number;
+			// showheaders?: boolean;
+			// headers?: JsonObject;
+		// },
+		// requestOptions: any
+	// ) => {
+		// let cookie = credentials.cachedAuthCookie || credentials.authcookie;
+		// requestOptions.headers = requestOptions.headers || {};
+		// requestOptions.headers['Cookie'] = cookie;
+		// requestOptions.headers['User-Agent'] = 'n8n-nodes-vrchat';
+		// return requestOptions;
+	// };
+
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: 'https://api.vrchat.cloud/api/1',
