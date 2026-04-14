@@ -1,3 +1,5 @@
+/* eslint-disable @n8n/community-nodes/icon-validation */
+/* eslint-disable n8n-nodes-base/cred-class-field-name-uppercase-first-char */
 import {
 	ICredentialType,
 	INodeProperties,
@@ -5,9 +7,10 @@ import {
 	IAuthenticateGeneric,
 } from 'n8n-workflow';
 
-export class VRChatAPI implements ICredentialType {
-	name = 'VRChatAPI';
+export class VRChatApi implements ICredentialType {
+	name = 'VRChatApi';
 	displayName = 'VRChat API';
+	icon: ICredentialType['icon'] = 'file:../../icons/vrchat.svg';
 	// Uses the link to this tutorial as an example
 	// Replace with your own docs links when building your own nodes
 	documentationUrl = 'https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/';
