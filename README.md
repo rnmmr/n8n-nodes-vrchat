@@ -4,7 +4,7 @@ This is an n8n community node that allows you to use the VRChat API in your n8n 
 这是一个 n8n 社区节点，可用于在 n8n 工作流中调用 VRChat API。
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.  
-n8n 是一个采用 Fair-Code 许可的工作流自动化平台。
+[n8n](https://n8n.io/) 是一个采用 [fair-code licensed](https://docs.n8n.io/reference/license/) 许可的工作流自动化平台。
 
 ---
 
@@ -33,9 +33,7 @@ This project is intended for **personal use and learning only**.
 先[安装n8n](https://docs.n8n.io/hosting/)
 
 然后在[这里](https://github.com/rnmmr/n8n-nodes-vrchat/releases)下载最新的`n8n-nodes-vrchat.zip` 文件
-解压到 `C:\Users\你的用户名\.n8n\custom\node_modules` (一般是这个位置)
-> node_modules
-> └ n8n-nodes-vrchat
+解压到 `C:\Users\你的用户名\.n8n\custom\node_modules` (一般是这个位置)，像这样`node_modules\n8n-nodes-vrchat`
 
 应该就行了吧（
 
@@ -77,16 +75,33 @@ This node uses VRChat authCookie for authentication
 
 本节点使用 **VRChat authCookie** 进行认证
 
-**⚠️请注意，随意泄露任何Cookie都是很危险的行为，请勿将Cookie透露给任何人，本项目不会上传任何Cookie**
+**⚠️请注意，随意泄露任何Cookie都是很危险的行为，请勿将Cookie透露给任何人，本项目不会上传任何Cookie⚠️**
 
-- 本项目不会帮助用户自动登录，请手动获取authCookie
+- 本项目不会帮助用户自动登录获取authCookie，请手动获取authCookie
+
+#### 如何获取authCookie
+
+登录[VRChat网页端](https://vrchat.com/home)，打开开发者工具(按F12)
+
+点击上方网络，然后按F5或者等待一会
+
+按照下面的方法找
+
+![alt text](https://youke.xn--y7xa690gmna.cn/s1/2026/01/27/69779109ed7db.webp)
+
+**⚠️请注意，随意泄露任何Cookie都是很危险的行为，请勿将Cookie透露给任何人，本项目不会上传任何Cookie⚠️**
+
+获取到这一串authCookie:`auth=authcookie_ca80483d-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
+
+点开一个节点，点击新建凭证填入此authCookie
 
 ---
 
 ## Example / 示例
 
 ![视奸喵](http://youke.xn--y7xa690gmna.cn/s1/2026/01/26/697642bb4ecd9.webp)
-此示例已获得该玩家本人允许
+
+只是开个玩笑，此示例已获得该玩家本人允许
 
 ---
 
@@ -100,6 +115,7 @@ This project is **not affiliated with VRChat Inc.**
 ## ToDo
 - [ ] 改回全英语
 - [ ] 本地日志Trigger
+- [ ] OSC功能
 
 ---
 
