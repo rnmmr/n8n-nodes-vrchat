@@ -21,7 +21,7 @@ export class VRChatApi implements ICredentialType {
 			name: 'authcookie',
 			type: 'string',
 			default: '',
-			placeholder: 'auth=xxxxxxxxxxxxxxxx',
+			placeholder: 'authcookie_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
 		},
 //		{
 //			displayName: 'Cookie Expires At',
@@ -60,7 +60,7 @@ export class VRChatApi implements ICredentialType {
 		type: 'generic',
 		properties: {
 			headers: {
-				Cookie: '={{$credentials.authcookie}}',
+				Cookie: '={{"auth="+$credentials.authcookie}}',
 				"User-Agent":"n8n-nodes-vrchat",
 			},
 		},
