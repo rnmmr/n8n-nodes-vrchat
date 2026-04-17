@@ -1,10 +1,10 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showeditinfo = { function: ['修改本人信息'] }
+const showeditinfo = { function: ['Update Current User'] };
 
 export const updateinfo: INodeProperties[] = [
 	{
-		displayName: '本人UserID',
+		displayName: 'Current User ID',
 		name: 'OwnUserid',
 		type: 'string',
 		placeholder: 'usr_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
@@ -19,15 +19,15 @@ export const updateinfo: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: '修改信息',
+		displayName: 'User Info',
 		name: 'additionalFields',
 		type: 'collection',
 		default: {},
-		placeholder: '添加修改信息字段',
+		placeholder: 'Add user info fields',
 		displayOptions: { show: showeditinfo },
 		options: [
 			{
-				displayName: '状态',
+				displayName: 'Status',
 				name: 'status',
 				type: 'options',
 				default: 'active',
@@ -49,7 +49,7 @@ export const updateinfo: INodeProperties[] = [
 						value: 'join me',
 					},
 					{
-						name: 'Offline(?)',
+						name: 'Offline',
 						value: 'offline',
 					},
 				],
@@ -62,7 +62,7 @@ export const updateinfo: INodeProperties[] = [
 				},
 			},
 			{
-				displayName: '状态文本',
+				displayName: 'Status Description',
 				name: 'statusDescription',
 				type: 'string',
 				placeholder: 'ZzZzZz...',
@@ -71,12 +71,12 @@ export const updateinfo: INodeProperties[] = [
 					request: {
 						body: {
 							statusDescription: '={{$value}}',
-						},	
+						},
 					},
 				},
 			},
-            {
-				displayName: '简介',
+			{
+				displayName: 'Bio',
 				name: 'bio',
 				type: 'string',
 				placeholder: 'Hello VRChat!',
@@ -85,21 +85,21 @@ export const updateinfo: INodeProperties[] = [
 					request: {
 						body: {
 							bio: '={{$value}}',
-						},	
+						},
 					},
 				},
 			},
 			{
-				displayName: '代称',
+				displayName: 'Pronouns',
 				name: 'pronouns',
 				type: 'string',
-				placeholder: '沃尔玛塑料袋/武装直升机',
+				placeholder: 'they/them',
 				default: '',
 				routing: {
 					request: {
 						body: {
 							pronouns: '={{$value}}',
-						},	
+						},
 					},
 				},
 			},

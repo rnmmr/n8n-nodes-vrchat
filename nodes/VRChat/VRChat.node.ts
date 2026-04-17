@@ -3,8 +3,6 @@
 import {
 	INodeType,
 	INodeTypeDescription,
-	//IExecuteFunctions,
-	//INodeExecutionData,
 } from 'n8n-workflow';
 import { updateinfo } from './updateinfo';
 
@@ -35,20 +33,29 @@ export class VRChat implements INodeType {
 				'Content-Type': 'application/json',
 			},
 		},
-		// Basic node details will go here
 		properties: [
 			{
-				displayName: '方法',
+				displayName: 'Function',
 				name: 'function',
 				type: 'options',
 				options: [
 					{
-						name: '查看房间',
-						value: '查看房间',
+						name: 'Accept Friend Request',
+						value: 'Accept Friend Request',
 					},
 					{
-						name: '获取本人信息',
-						value: '获取本人信息',
+						name: 'Change User Info',
+						value: 'changeUserInfo',
+						// routing: {
+						// 	request: {
+						// 		method: 'PUT',
+						// 		url: '/users',
+						// 	},
+						// },
+					},
+					{
+						name: 'Get Current User',
+						value: 'Get Current User',
 						routing: {
 							request: {
 								method: 'GET',
@@ -57,8 +64,8 @@ export class VRChat implements INodeType {
 						},
 					},
 					{
-						name: '获取共同好友',
-						value: '获取共同好友',
+						name: 'Get Mutual Friends',
+						value: 'Get Mutual Friends',
 						routing: {
 							request: {
 								method: 'GET',
@@ -67,8 +74,8 @@ export class VRChat implements INodeType {
 						},
 					},
 					{
-						name: '获取通知',
-						value: '获取通知',
+						name: 'Get Notifications',
+						value: 'Get Notifications',
 						routing: {
 							request: {
 								method: 'GET',
@@ -77,8 +84,8 @@ export class VRChat implements INodeType {
 						},
 					},
 					{
-						name: '获取玩家信息',
-						value: '获取玩家信息',
+						name: 'Get User Info',
+						value: 'Get User Info',
 						routing: {
 							request: {
 								method: 'GET',
@@ -87,12 +94,12 @@ export class VRChat implements INodeType {
 						},
 					},
 					{
-						name: '接受申请',
-						value: '接受申请',
+						name: 'Get World Info',
+						value: 'Get World Info',
 					},
 					{
-						name: '搜索玩家',
-						value: '搜索玩家',
+						name: 'Search Users',
+						value: 'Search Users',
 						routing: {
 							request: {
 								method: 'GET',
@@ -100,33 +107,22 @@ export class VRChat implements INodeType {
 							},
 						},
 					},
-					{
-						name: '修改本人信息',
-						value: '修改本人信息',
-						// routing: {
-						// 	request: {
-						// 		method: 'PUT',
-						// 		url: '/users',
-						// 	},
-						// },
-					},
 					// {
 					// 	name: '群组管理',
 					// 	value: '群组管理',
 					// },
 				],
-				default: '获取本人信息',
+				default: 'Get Current User',
 			},
-			// 搜索玩家
 			{
-				displayName: '玩家名字',
+				displayName: 'Username',
 				name: 'UserName',
 				type: 'string',
-				placeholder: '名字',
+				placeholder: 'Username',
 				required: true,
 				displayOptions: {
 					show: {
-						function: ['搜索玩家'],
+						function: ['Search Users'],
 					},
 				},
 				routing: {
@@ -140,31 +136,28 @@ export class VRChat implements INodeType {
 			},
 			// 获取玩家信息(爆改成通用参数了)
 			{
-				displayName: '玩家UserID',
+				displayName: 'User ID',
 				name: 'UserID',
 				type: 'string',
 				required: true,
 				placeholder: 'usr_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
 				displayOptions: {
 					show: {
-						function: ['获取玩家信息','获取共同好友'],
+						function: ['Get User Info', 'Get Mutual Friends'],
 					},
 				},
 				default: '',
 			},
-			// 修改本人信息
 			...updateinfo,
-			// 获取共同好友
-			// 接受申请
 			{
-				displayName: '申请ID',
+				displayName: 'Friend Request ID',
 				name: 'frqId',
 				type: 'string',
 				required: true,
 				placeholder: 'frq_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
 				displayOptions: {
 					show: {
-						function: ['接受申请'],
+						function: ['Accept Friend Request'],
 					},
 				},
 				routing: {
@@ -175,16 +168,15 @@ export class VRChat implements INodeType {
 				},
 				default: '',
 			},
-			// 查看房间
 			{
-				displayName: '世界ID',
+				displayName: 'World ID',
 				name: 'worldId',
 				type: 'string',
 				required: true,
 				placeholder: 'wrld__xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
 				displayOptions: {
 					show: {
-						function: ['查看房间'],
+						function: ['Get World Info'],
 					},
 				},
 				routing: {
@@ -196,15 +188,15 @@ export class VRChat implements INodeType {
 				default: '',
 			},
 			{
-				displayName: '附加信息',
+				displayName: 'Additional Info',
 				name: 'additionalinfo',
 				type: 'collection',
 				default: {},
-				placeholder: '添加附加信息字段',
-				displayOptions: { show: {function: ['查看房间'],} },
+				placeholder: 'Add additional info fields',
+				displayOptions: { show: { function: ['Get World Info'] } },
 				options: [
 					{
-						displayName: '房间ID',
+						displayName: 'Instance ID',
 						name: 'instanceId',
 						type: 'string',
 						placeholder: '12345~hidden(usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469)~region(eu)~nonce(27e8414a-59a0-4f3d-af1f-f27557eb49a2)',
@@ -218,17 +210,16 @@ export class VRChat implements INodeType {
 					},
 				],
 			},
-			// 通用参数
 			{
-				displayName: '结果参数',
-				name: '结果参数字段',
+				displayName: 'Result Parameters',
+				name: 'resultParams',
 				type: 'collection',
 				default: {},
-				placeholder: '添加结果参数字段',
-				displayOptions: { show: {function: ['搜索玩家', '获取通知', '获取共同好友']} },
+				placeholder: 'Add result parameters',
+				displayOptions: { show: { function: ['Search Users', 'Get Notifications', 'Get Mutual Friends'] } },
 				options: [
 					{
-						displayName: '结果数量',
+						displayName: 'Result Count',
 						name: 'n',
 						type: 'string',
 						placeholder: '60',
@@ -242,7 +233,7 @@ export class VRChat implements INodeType {
 						},
 					},
 					{
-						displayName: '偏移量',
+						displayName: 'Offset',
 						name: 'offset',
 						type: 'string',
 						placeholder: '0',
@@ -259,7 +250,5 @@ export class VRChat implements INodeType {
 			},
 		],
 		usableAsTool: true,
-		// async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-		// }
 	};
 }
