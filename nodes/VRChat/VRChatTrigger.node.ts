@@ -1,6 +1,6 @@
 /* eslint-disable n8n-nodes-base/node-filename-against-convention */
 /* eslint-disable @n8n/community-nodes/no-restricted-imports */
-import { ITriggerFunctions, INodeType, INodeTypeDescription, ITriggerResponse } from 'n8n-workflow';
+import { ITriggerFunctions, INodeType, INodeTypeDescription, ITriggerResponse, NodeOperationError } from 'n8n-workflow';
 
 import WebSocket from 'ws';
 import { setTimeout as nodeSetTimeout, clearTimeout as nodeClearTimeout } from 'timers';
@@ -57,6 +57,16 @@ export class VRChatTrigger implements INodeType {
 	async trigger(this: ITriggerFunctions): Promise<ITriggerResponse> {
 		const credentials = await this.getCredentials('VRChatApi') as { authcookie?: string };
 		const cookieValue = credentials.authcookie ? String(credentials.authcookie) : '';
+		
+		// 检测 cookie 格式
+		const cookieRegex = /^authcookie_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+		if (!cookieValue) {
+			throw new NodeOperationError(this.getNode(), 'Missing authentication cookie');
+		}
+		if (!cookieRegex.test(cookieValue)) {
+			throw new NodeOperationError(this.getNode(), 'Invalid cookie format. Expected: authcookie_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
+		}
+		
 		const autoReconnect = this.getNodeParameter('autoReconnect') as boolean;
 		const rawWsevent = this.getNodeParameter('wsevent') as unknown;
 		const wsevent = Array.isArray(rawWsevent)
@@ -75,10 +85,9 @@ export class VRChatTrigger implements INodeType {
 			if (isStopping) return;
 
 			this.logger.debug('Connecting VRChat WebSocket...');
-			ws = new WebSocket('wss://pipeline.vrchat.cloud/?' + cookieValue, {
+			ws = new WebSocket('wss://pipeline.vrchat.cloud/?authToken=' + cookieValue, {
 				headers: {
-					Cookie: cookieValue,
-					'User-Agent': 'n8n-nodes-vrchat',
+					'User-Agent': 'n8n-nodes-vrchat/1.0.1',
 				},
 			});
 
@@ -115,17 +124,19 @@ export class VRChatTrigger implements INodeType {
 			ws.on('error', (error) => {
 				this.logger.error('VRChat WebSocket error', { message: (error as Error).message });
 
-				if (!isStopping) {
-					this.emitError(error as Error); // 爆掉 workflow
+				if (!isStopping && !autoReconnect) {
+					this.emitError(error as Error); // 只有在不自动重连时才爆掉 workflow
 				}
 			});
 
 			ws.on('close', (code, reason) => {
-				this.logger.warn(`VRChat WebSocket closed (${code}) ${reason?.toString()}`);
+				this.logger.debug(`VRChat WebSocket closed (${code}) ${reason?.toString()}`);
 
 				if (!isStopping) {
-					// 爆掉 workflow
-					this.emitError(new Error(`WebSocket closed unexpectedly (${code})`));
+					// 只有在不自动重连时才爆掉 workflow
+					if (!autoReconnect) {
+						this.emitError(new Error(`WebSocket closed unexpectedly (${code})`));
+					}
 
 					// 如果允许自动重连
 					if (autoReconnect) scheduleReconnect();

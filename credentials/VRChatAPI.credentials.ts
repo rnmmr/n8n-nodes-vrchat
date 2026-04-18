@@ -1,4 +1,3 @@
-/* eslint-disable n8n-nodes-base/cred-filename-against-convention */
 /* eslint-disable @n8n/community-nodes/icon-validation */
 /* eslint-disable n8n-nodes-base/cred-class-field-name-uppercase-first-char */
 import {
@@ -61,7 +60,7 @@ export class VRChatApi implements ICredentialType {
 		properties: {
 			headers: {
 				Cookie: '={{"auth="+$credentials.authcookie}}',
-				"User-Agent":"n8n-nodes-vrchat",
+				"User-Agent":"n8n-nodes-vrchat/1.0.1",
 			},
 		},
 	};
