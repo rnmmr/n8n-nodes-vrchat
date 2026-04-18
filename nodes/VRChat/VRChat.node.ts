@@ -45,7 +45,7 @@ export class VRChat implements INodeType {
 					},
 					{
 						name: 'Change User Info',
-						value: 'changeUserInfo',
+						value: 'Change User Info',
 						// routing: {
 						// 	request: {
 						// 		method: 'PUT',
