@@ -155,6 +155,7 @@ export class VRChat implements INodeType {
 				type: 'string',
 				required: true,
 				placeholder: 'frq_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
+				description: 'Friend request ID obtained from notifications',
 				displayOptions: {
 					show: {
 						function: ['Accept Friend Request'],
