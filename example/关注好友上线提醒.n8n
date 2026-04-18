@@ -1,0 +1,187 @@
+{
+  "updatedAt": "2026-04-18T14:19:03.318Z",
+  "createdAt": "2026-04-18T12:30:38.241Z",
+  "name": "关注好友上线提醒",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "wsevent": [
+          "friend-location"
+        ]
+      },
+      "type": "CUSTOM.vrchatTrigger",
+      "typeVersion": 1,
+      "position": [
+        64,
+        160
+      ],
+      "id": "vrchat-trigger",
+      "name": "监听好友位置变化"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "friend-online-check",
+              "leftValue": "={{ $json.content.location }}",
+              "rightValue": "offline",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "friend-not-traveling",
+              "leftValue": "={{ $json.content.location }}",
+              "rightValue": "traveling",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        496,
+        64
+      ],
+      "id": "check-online",
+      "name": "检查好友是否上线"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=(企业微信机器人hookkey)",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\"msgtype\": \"text\", \"text\": {\"content\": $json.content.user.displayName + \" 上线了！当前位置：\" + $json.content.location} } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        704,
+        0
+      ],
+      "id": "send-notification",
+      "name": "发送上线通知"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "specific-friend-check",
+              "leftValue": "={{ $json.content.user.id }}",
+              "rightValue": "usr_好友id",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        288,
+        160
+      ],
+      "id": "check-specific-friend",
+      "name": "检查是否是关注的好友"
+    }
+  ],
+  "connections": {
+    "监听好友位置变化": {
+      "main": [
+        [
+          {
+            "node": "检查是否是关注的好友",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "检查是否是关注的好友": {
+      "main": [
+        [
+          {
+            "node": "检查好友是否上线",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "检查好友是否上线": {
+      "main": [
+        [
+          {
+            "node": "发送上线通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "15b5de40-604f-44a5-90ff-fbf17e5d4dba",
+  "activeVersionId": null,
+  "versionCounter": 17,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-04-18T12:30:38.243Z",
+      "createdAt": "2026-04-18T12:30:38.243Z",
+      "role": "workflow:owner",
+      "workflowId": "vz2ajYnOVEgXNjma",
+      "projectId": "3Oo2BjMHjayVWuav",
+      "project": {
+        "updatedAt": "2026-01-21T09:03:55.886Z",
+        "createdAt": "2026-01-21T09:02:12.143Z",
+        "id": "3Oo2BjMHjayVWuav",
+        "name": "mmr mmr <a2356960576@163.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "993a9082-5750-4276-b2e8-6b2f4fa6f9ce"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}

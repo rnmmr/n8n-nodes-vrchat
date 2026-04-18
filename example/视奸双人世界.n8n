@@ -1,0 +1,292 @@
+{
+  "updatedAt": "2026-04-18T12:21:10.009Z",
+  "createdAt": "2026-04-14T14:13:24.867Z",
+  "name": "视奸双人世界",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n//var a = \"wrld_41efe3b1-9931-40ab-a15d-6946d22481b5:49877~group(grp_e86e0e8a-c933-48c1-aae3-26490d7a54a4)~groupAccessType(public)~region(jp)\".split(\":\")\nvar a = $('接收好友活动').first().json.content.location.split(\":\")\n\nreturn {worldId:a[0],instanceId:a[1]};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        336
+      ],
+      "id": "c88c54a7-6817-41ec-b3a2-b04fb011a4ea",
+      "name": "转换一下数据"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "aaf849f8-d8b7-4d04-b04e-2ca4588e77b2",
+              "leftValue": "={{ $json.n_users }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        816,
+        336
+      ],
+      "id": "8c592bfa-9568-4a92-875b-517b000498e6",
+      "name": "如果房间里只有两个人"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6d11f004-b0d9-4d17-8207-70e756c3331f",
+              "leftValue": "={{ $('接收好友活动').item.json.content.location }}",
+              "rightValue": "private",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        144,
+        256
+      ],
+      "id": "c3cd9d58-6399-4faf-b754-fb6d8d9a8f2f",
+      "name": "如果在私人房"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=(企业微信机器人token)",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"msgtype\":\"text\",\"text\":{\"content\":\"又在二人世界哦\"}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        256
+      ],
+      "id": "61cb9c7e-9150-490e-9e99-4f5f671540dd",
+      "name": "企业微信推送"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1d52721a-fa6a-4e09-8856-f0662a9bd7f6",
+              "leftValue": "={{ $json.content.user.id }}",
+              "rightValue": "usr_好友id",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "cf10bd95-3dcb-4a69-9da5-5bb995643000",
+              "leftValue": "={{ $json.content.location }}",
+              "rightValue": "traveling",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -80,
+        256
+      ],
+      "id": "f8c5e94f-c571-4a29-97b5-3230d4d69742",
+      "name": "如果是指定玩家"
+    },
+    {
+      "parameters": {
+        "function": "Get World Info",
+        "worldId": "={{ $json.worldId }}",
+        "additionalinfo": {
+          "instanceId": "={{ $json.instanceId }}"
+        },
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.vrChat",
+      "typeVersion": 1,
+      "position": [
+        592,
+        336
+      ],
+      "id": "317e8a68-0f48-46d6-a4f4-14c4b9f64730",
+      "name": "VRChat"
+    },
+    {
+      "parameters": {
+        "wsevent": [
+          "friend-location"
+        ]
+      },
+      "type": "CUSTOM.vrchatTrigger",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        256
+      ],
+      "id": "ca19be13-68d9-44b8-b074-5a74ddafcd9c",
+      "name": "接收好友活动"
+    }
+  ],
+  "connections": {
+    "转换一下数据": {
+      "main": [
+        [
+          {
+            "node": "VRChat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "如果房间里只有两个人": {
+      "main": [
+        [
+          {
+            "node": "企业微信推送",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "如果在私人房": {
+      "main": [
+        [
+          {
+            "node": "企业微信推送",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "转换一下数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "如果是指定玩家": {
+      "main": [
+        [
+          {
+            "node": "如果在私人房",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VRChat": {
+      "main": [
+        [
+          {
+            "node": "如果房间里只有两个人",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "接收好友活动": {
+      "main": [
+        [
+          {
+            "node": "如果是指定玩家",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "1282b8f4-6641-4047-9723-c0ea84e11280",
+  "activeVersionId": null,
+  "versionCounter": 97,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-04-14T14:13:24.870Z",
+      "createdAt": "2026-04-14T14:13:24.870Z",
+      "role": "workflow:owner",
+      "workflowId": "bKBFjyCfw5SiVsoH",
+      "projectId": "3Oo2BjMHjayVWuav",
+      "project": {
+        "updatedAt": "2026-01-21T09:03:55.886Z",
+        "createdAt": "2026-01-21T09:02:12.143Z",
+        "id": "3Oo2BjMHjayVWuav",
+        "name": "mmr mmr <a2356960576@163.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "993a9082-5750-4276-b2e8-6b2f4fa6f9ce"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
