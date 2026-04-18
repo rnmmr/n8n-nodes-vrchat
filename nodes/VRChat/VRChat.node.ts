@@ -173,7 +173,7 @@ export class VRChat implements INodeType {
 				name: 'worldId',
 				type: 'string',
 				required: true,
-				placeholder: 'wrld__xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+				placeholder: 'wrld_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
 				displayOptions: {
 					show: {
 						function: ['Get World Info'],
