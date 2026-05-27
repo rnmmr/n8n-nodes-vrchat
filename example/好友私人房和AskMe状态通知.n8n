@@ -1,0 +1,289 @@
+{
+  "updatedAt": "2026-04-19T00:00:00.000Z",
+  "createdAt": "2026-04-19T00:00:00.000Z",
+  "name": "好友私人房和AskMe状态通知",
+  "description": "当好友进入私人房或状态变为AskMe时发送企业微信通知",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "wsevent": [
+          "friend-location",
+          "friend-update"
+        ]
+      },
+      "type": "CUSTOM.vrchatTrigger",
+      "typeVersion": 1,
+      "position": [
+        100,
+        200
+      ],
+      "id": "vrchat-trigger",
+      "name": "监听好友位置和状态变化"
+    },
+    {
+      "parameters": {
+        "function": "Get User Info",
+        "UserID": "={{ $json.content.user.id }}"
+      },
+      "type": "CUSTOM.vrChat",
+      "typeVersion": 1,
+      "position": [
+        380,
+        200
+      ],
+      "id": "get-user-info",
+      "name": "获取好友详细信息",
+      "credentials": {
+        "VRChatApi": {
+          "id": "",
+          "name": "VRChat account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "private-room-check",
+              "leftValue": "={{ $json.content.location }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or",
+          "triggerFields": {
+            "leftValue": [],
+            "rightValue": []
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        660,
+        200
+      ],
+      "id": "check-private-room",
+      "name": "检查是否私人房"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ask-me-check",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "ask me",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and",
+          "triggerFields": {
+            "leftValue": [],
+            "rightValue": []
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        660,
+        400
+      ],
+      "id": "check-ask-me",
+      "name": "检查是否AskMe状态"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=(企业微信机器人webhook key)",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\"msgtype\": \"text\", \"text\": {\"content\": $json.content.user.displayName + \" 进入了私人房！当前位置：\" + $json.content.location} } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        200
+      ],
+      "id": "notify-private-room",
+      "name": "发送私人房通知"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=(企业微信机器人webhook key)",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\"msgtype\": \"text\", \"text\": {\"content\": $json.content.user.displayName + \" 的状态变为 Ask Me 了！\"} } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        400
+      ],
+      "id": "notify-ask-me",
+      "name": "发送AskMe通知"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "location-not-offline",
+              "leftValue": "={{ $json.content.location }}",
+              "rightValue": "offline",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "location-not-traveling",
+              "leftValue": "={{ $json.content.location }}",
+              "rightValue": "traveling",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and",
+          "triggerFields": {
+            "leftValue": [],
+            "rightValue": []
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        380,
+        400
+      ],
+      "id": "filter-offline",
+      "name": "过滤离线状态"
+    }
+  ],
+  "connections": {
+    "监听好友位置和状态变化": {
+      "main": [
+        [
+          {
+            "node": "获取好友详细信息",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "过滤离线状态",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "获取好友详细信息": {
+      "main": [
+        [
+          {
+            "node": "检查是否私人房",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "检查是否私人房": {
+      "main": [
+        [
+          {
+            "node": "发送私人房通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "检查是否AskMe状态": {
+      "main": [
+        [
+          {
+            "node": "发送AskMe通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "发送私人房通知": {
+      "main": [
+        []
+      ]
+    },
+    "发送AskMe通知": {
+      "main": [
+        []
+      ]
+    },
+    "过滤离线状态": {
+      "main": [
+        [
+          {
+            "node": "检查是否AskMe状态",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": null,
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "shared": [],
+  "tags": []
+}

@@ -49,7 +49,8 @@ Both nodes require `VRChatApi` credentials:
 | `Get World Info` | Fetch world instance details | `worldId` |
 | `Get Mutual Friends` | Find mutual friends | `UserID` |
 | `Get Notifications` | Fetch user notifications | (none) |
-| `Accept Friend Request` | Accept incoming friend request | (none) |
+| `Accept Friend Request` | Accept incoming friend request | `frqId` |
+| `Search Users` | Search for users by username | `UserName` |
 
 ### Configuration Template
 
@@ -119,9 +120,16 @@ Both nodes require `VRChatApi` credentials:
 
 ### Events
 
-| Event | Description |
-|-------|-------------|
-| `friend-location` | Triggered when a friend's location changes |
+| Event | Value | Description |
+|-------|-------|-------------|
+| Friend Location/Avatar Change | `friend-location` | Triggered when a friend's location or avatar changes |
+| Friend Offline | `friend-offline` | Triggered when a friend goes offline |
+| Friend Online | `friend-online` | Triggered when a friend comes online |
+| Friend Update | `friend-update` | Triggered when a friend's information is updated |
+| Notification Received | `notification` | Triggered when a new notification is received |
+| Other | `other` | Triggered for other types of events |
+| User Location Change | `user-location` | Triggered when the current user's location changes |
+| User Update | `user-update` | Triggered when the current user's information is updated |
 
 ### Configuration Template
 
@@ -130,7 +138,8 @@ Both nodes require `VRChatApi` credentials:
   "type": "CUSTOM.vrchatTrigger",
   "typeVersion": 1,
   "parameters": {
-    "wsevent": ["friend-location"]
+    "wsevent": ["friend-location"],
+    "autoReconnect": true
   },
   "credentials": {
     "VRChatApi": {
