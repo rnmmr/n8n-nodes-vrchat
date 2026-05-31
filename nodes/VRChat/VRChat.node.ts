@@ -13,7 +13,7 @@ export class VRChat implements INodeType {
 		icon: 'file:../../icons/vrchat.svg',
 		group: ['transform'],
 		version: 1,
-		subtitle: '={{$parameter["function"]}}', //'={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+		subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
 		description: 'VRChat API',
 		defaults: {
 			name: 'VRChat',
@@ -22,7 +22,7 @@ export class VRChat implements INodeType {
 		outputs: ['main'],
 		credentials: [
 			{
-				   name: 'VRChatApi',
+				name: 'VRChatApi',
 				required: true,
 			},
 		],
@@ -34,28 +34,53 @@ export class VRChat implements INodeType {
 			},
 		},
 		properties: [
+			// ── Resource ──────────────────────────────
 			{
-				displayName: 'Function',
-				name: 'function',
+				displayName: 'Resource',
+				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
-						name: 'Accept Friend Request',
-						value: 'Accept Friend Request',
+						name: 'Notification',
+						value: 'notification',
+						action: 'Friend requests and notifications',
+						description: 'Friend requests and notifications',
 					},
 					{
+						name: 'User',
+						value: 'user',
+						action: 'User information and friends',
+						description: 'User information and friends',
+					},
+					{
+						name: 'World',
+						value: 'world',
+						action: 'World information',
+						description: 'World information',
+					},
+				],
+				default: 'user',
+			},
+			// ── User Operations ────────────────────────
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: { show: { resource: ['user'] } },
+				options: [
+					{
 						name: 'Change User Info',
-						value: 'Change User Info',
-						// routing: {
-						// 	request: {
-						// 		method: 'PUT',
-						// 		url: '/users',
-						// 	},
-						// },
+						value: 'changeUserInfo',
+						action: 'Update the current user s info',
+						description: 'Update the current user\'s info',
 					},
 					{
 						name: 'Get Current User',
-						value: 'Get Current User',
+						value: 'getCurrentUser',
+						action: 'Get the currently authenticated user',
+						description: 'Get the currently authenticated user',
 						routing: {
 							request: {
 								method: 'GET',
@@ -65,41 +90,21 @@ export class VRChat implements INodeType {
 					},
 					{
 						name: 'Get Mutual Friends',
-						value: 'Get Mutual Friends',
-						routing: {
-							request: {
-								method: 'GET',
-								url: '=/users/{{$parameter["UserID"]}}/mutuals/friends',
-							},
-						},
-					},
-					{
-						name: 'Get Notifications',
-						value: 'Get Notifications',
-						routing: {
-							request: {
-								method: 'GET',
-								url: '/auth/user/notifications',
-							},
-						},
+						value: 'getMutualFriends',
+						action: 'Get mutual friends with another user',
+						description: 'Get mutual friends with another user',
 					},
 					{
 						name: 'Get User Info',
-						value: 'Get User Info',
-						routing: {
-							request: {
-								method: 'GET',
-								url: '=/users/{{$parameter["UserID"]}}',
-							},
-						},
-					},
-					{
-						name: 'Get World Info',
-						value: 'Get World Info',
+						value: 'getUserInfo',
+						action: 'Get info about a specific user',
+						description: 'Get info about a specific user',
 					},
 					{
 						name: 'Search Users',
-						value: 'Search Users',
+						value: 'searchUsers',
+						action: 'Search for users by name',
+						description: 'Search for users by name',
 						routing: {
 							request: {
 								method: 'GET',
@@ -107,12 +112,69 @@ export class VRChat implements INodeType {
 							},
 						},
 					},
-					// {
-					// 	name: '群组管理',
-					// 	value: '群组管理',
-					// },
 				],
-				default: 'Get Current User',
+				default: 'getCurrentUser',
+			},
+			// ── World Operations ───────────────────────
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: { show: { resource: ['world'] } },
+				options: [
+					{
+						name: 'Get World Info',
+						value: 'getWorldInfo',
+						action: 'Get info about a specific world',
+						description: 'Get info about a specific world',
+					},
+				],
+				default: 'getWorldInfo',
+			},
+			// ── Notification Operations ─────────────────
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: { show: { resource: ['notification'] } },
+				options: [
+					{
+						name: 'Accept Friend Request',
+						value: 'acceptFriendRequest',
+						action: 'Accept a friend request',
+						description: 'Accept a friend request',
+					},
+					{
+						name: 'Get Notifications',
+						value: 'getNotifications',
+						action: 'Get all notifications',
+						description: 'Get all notifications',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '/auth/user/notifications',
+							},
+						},
+					},
+				],
+				default: 'getNotifications',
+			},
+			// ── Shared Fields: User ─────────────────────
+			{
+				displayName: 'User ID',
+				name: 'UserID',
+				type: 'string',
+				required: true,
+				placeholder: 'usr_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
+				displayOptions: {
+					show: {
+						resource: ['user'],
+						operation: ['getUserInfo', 'getMutualFriends'],
+					},
+				},
+				default: '',
 			},
 			{
 				displayName: 'Username',
@@ -122,7 +184,8 @@ export class VRChat implements INodeType {
 				required: true,
 				displayOptions: {
 					show: {
-						function: ['Search Users'],
+						resource: ['user'],
+						operation: ['searchUsers'],
 					},
 				},
 				routing: {
@@ -134,21 +197,8 @@ export class VRChat implements INodeType {
 				},
 				default: '',
 			},
-			// 获取玩家信息(爆改成通用参数了)
-			{
-				displayName: 'User ID',
-				name: 'UserID',
-				type: 'string',
-				required: true,
-				placeholder: 'usr_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
-				displayOptions: {
-					show: {
-						function: ['Get User Info', 'Get Mutual Friends'],
-					},
-				},
-				default: '',
-			},
 			...updateinfo,
+			// ── Shared Fields: Notification ─────────────
 			{
 				displayName: 'Friend Request ID',
 				name: 'frqId',
@@ -158,7 +208,8 @@ export class VRChat implements INodeType {
 				description: 'Friend request ID obtained from notifications',
 				displayOptions: {
 					show: {
-						function: ['Accept Friend Request'],
+						resource: ['notification'],
+						operation: ['acceptFriendRequest'],
 					},
 				},
 				routing: {
@@ -169,6 +220,7 @@ export class VRChat implements INodeType {
 				},
 				default: '',
 			},
+			// ── Shared Fields: World ────────────────────
 			{
 				displayName: 'World ID',
 				name: 'worldId',
@@ -177,7 +229,8 @@ export class VRChat implements INodeType {
 				placeholder: 'wrld_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
 				displayOptions: {
 					show: {
-						function: ['Get World Info'],
+						resource: ['world'],
+						operation: ['getWorldInfo'],
 					},
 				},
 				routing: {
@@ -194,13 +247,18 @@ export class VRChat implements INodeType {
 				type: 'collection',
 				default: {},
 				placeholder: 'Add additional info fields',
-				displayOptions: { show: { function: ['Get World Info'] } },
+				displayOptions: {
+					show: {
+						resource: ['world'],
+						operation: ['getWorldInfo'],
+					},
+				},
 				options: [
 					{
 						displayName: 'Instance ID',
 						name: 'instanceId',
 						type: 'string',
-						placeholder: '12345~hidden(usr_c1644b5b-3ca4-45b4-97c6-a2a0de70d469)~region(eu)~nonce(27e8414a-59a0-4f3d-af1f-f27557eb49a2)',
+						placeholder: '12345~hidden(usr_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx)~region(eu)~nonce(xxxxxxxx)',
 						routing: {
 							request: {
 								method: 'GET',
@@ -211,13 +269,19 @@ export class VRChat implements INodeType {
 					},
 				],
 			},
+			// ── Shared Fields: List Operations ──────────
 			{
 				displayName: 'Result Parameters',
 				name: 'resultParams',
 				type: 'collection',
 				default: {},
 				placeholder: 'Add result parameters',
-				displayOptions: { show: { function: ['Search Users', 'Get Notifications', 'Get Mutual Friends'] } },
+				displayOptions: {
+					show: {
+						resource: ['user', 'notification'],
+						operation: ['searchUsers', 'getNotifications', 'getMutualFriends'],
+					},
+				},
 				options: [
 					{
 						displayName: 'Result Count',

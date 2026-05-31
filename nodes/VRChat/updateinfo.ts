@@ -1,6 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showeditinfo = { function: ['Change User Info'] };
+const showeditinfo = { resource: ['user'], operation: ['changeUserInfo'] };
 
 export const updateinfo: INodeProperties[] = [
 	{

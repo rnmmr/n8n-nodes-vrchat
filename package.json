@@ -37,7 +37,10 @@
 			"dist/credentials/VRChatApi.credentials.js"
 		],
 		"nodes": [
-			"dist/nodes/VRChat/VRChat.node.js"
+			"dist/nodes/VRChat/VRChat.node.js",
+			"dist/nodes/VRChat/VRChatTrigger.node.js",
+			"dist/nodes/OSC/VrchatOscTrigger.node.js",
+			"dist/nodes/OSC/VrchatOscSend.node.js"
 		]
 	},
 	"devDependencies": {

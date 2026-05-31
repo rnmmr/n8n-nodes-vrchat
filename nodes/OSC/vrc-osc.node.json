@@ -1,0 +1,18 @@
+{
+	"nodes": [
+		{
+			"class": { "name": "VrchatOscTrigger", "sourceFile": "VrchatOscTrigger.node.ts" },
+			"localization": {
+				"displayName": "VRChat OSC Trigger",
+				"description": "Listens for incoming VRChat OSC messages via UDP"
+			}
+		},
+		{
+			"class": { "name": "VrchatOscSend", "sourceFile": "VrchatOscSend.node.ts" },
+			"localization": {
+				"displayName": "VRChat OSC Send",
+				"description": "Sends VRChat OSC messages via UDP"
+			}
+		}
+	]
+}
