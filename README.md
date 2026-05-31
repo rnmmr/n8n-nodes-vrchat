@@ -51,24 +51,35 @@ npm install n8n-nodes-vrchat
 The following VRChat API operations are currently supported:
 目前支持的 VRChat API 功能包括：
 
-- **Real-time friend activity trigger**
-  实时接收好友动态触发器
-- **Get Current User**
-  获取当前用户信息
-- **Update Current User**
-  修改当前用户信息
-- **Search Users**
-  搜索玩家
-- **Get User Info**
-  获取玩家信息
-- **Get Mutual Friends**
-  获取共同好友
-- **Get Notifications**
-  获取通知
-- **Accept Friend Request**
-  接受好友请求
-- **Get Room / Instance Info**
-  获取房间/实例信息
+### VRChat API
+
+- **Get Current User** / 获取当前用户信息
+- **Update Current User** / 修改当前用户信息
+- **Search Users** / 搜索玩家
+- **Get User Info** / 获取玩家信息
+- **Get Mutual Friends** / 获取共同好友
+- **Get Notifications** / 获取通知
+- **Accept Friend Request** / 接受好友请求
+- **Get World Info** / 获取世界/实例信息
+
+### VRChat Trigger
+
+- **Real-time friend activity trigger** / 实时接收好友动态触发器
+
+### VRChat OSC Send / OSC 发送
+
+- **VRChat Preset Mode** / VRChat 预设模式
+  - Chatbox: 发送聊天框消息、打字指示器
+  - Input Axes: 移动、视角控制（7个轴向）
+  - Input Buttons: 跳跃、奔跑、语音等（20个按钮）
+  - Avatar Parameters: 设置角色参数
+- **Custom Mode** / 自定义模式：自由输入OSC地址和JSON值
+
+### VRChat OSC Trigger / OSC 接收
+
+- **监听VRChat OSC输出** / 默认端口9001
+- **消息过滤**：All Messages / Avatar Change / Avatar Parameters / Custom Address
+- **转发功能**：将OSC消息转发到其他端口，支持多消费者共享同一份数据
 
 ***
 
@@ -117,7 +128,7 @@ This project is **not affiliated with VRChat Inc.**
 
 - [ ] 返回全文搜索
 - [ ] 本地日志 Trigger
-- [ ] OSC 功能
+- [x] OSC 功能
 
 ***
 
