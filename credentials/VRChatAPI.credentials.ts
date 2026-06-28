@@ -89,9 +89,25 @@ export class VRChatApi implements ICredentialType {
 			url: '/auth/user',
 			method: "GET",
 			headers: {
-				Cookie: '={{$credentials.authcookie}}',
-				"User-Agent":"n8n-nodes-vrchat",
+				Cookie: '={{"auth="+$credentials.authcookie}}',
+				"User-Agent":"n8n-nodes-vrchat/1.0.1",
 			},
 		},
+		rules: [
+			{
+				type: 'responseCode',
+				properties: {
+					value: 401,
+					message: 'Auth cookie 无效或已过期，请重新从浏览器 DevTools 获取 authcookie',
+				},
+			},
+			{
+				type: 'responseCode',
+				properties: {
+					value: 403,
+					message: '访问被拒绝，可能需要重新登录 VRChat 或 cookie 格式不正确',
+				},
+			},
+		],
 	};
 }

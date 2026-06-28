@@ -1,8 +1,10 @@
 dist
 node_modules
+.vscode/
 nodes/VRChat/vrchat.node copy
 credentials/VRChatAPI.credentials copy
 README_EN.md
 credentials/逻辑图.prg
 .trae/
 example/测试例.n8n
+AGENTS.md
