@@ -71,7 +71,7 @@ export class VrchatOscTrigger implements INodeType {
 				displayOptions: { show: { filterMode: ['avatar-parameters'] } },
 				default: '*',
 				placeholder: '*',
-				description: 'Filter avatar parameters by name. Use * to match all, or enter a specific parameter name (e.g. VRCEmote, IsLocal).',
+				description: 'Filter avatar parameters by name. Supports * wildcard: * = all, VRCEmote = exact match, Fiona* = starts with, *Emote = ends with, *Face* = contains.',
 			},
 			{
 				displayName: 'Address Pattern',
@@ -80,7 +80,7 @@ export class VrchatOscTrigger implements INodeType {
 				displayOptions: { show: { filterMode: ['custom'] } },
 				default: '/avatar/parameters/*',
 				placeholder: '/avatar/parameters/*',
-				description: 'OSC address pattern to match. Supports wildcard * at the end. Example: /avatar/parameters/*, /chatbox/*',
+				description: 'OSC address pattern to match. Supports * wildcard anywhere. Examples: /avatar/parameters/Fiona*, /chatbox/input, /avatar/parameters/*Face*',
 			},
 			// ── Forwarding Options ──────────────────────
 			{
@@ -145,15 +145,13 @@ export class VrchatOscTrigger implements INodeType {
 		let addressFilter = '';
 		let matchExact = '';
 
+
+		
 		if (filterMode === 'avatar-change') {
 			matchExact = '/avatar/change';
 		} else if (filterMode === 'avatar-parameters') {
 			const paramFilter = (this.getNodeParameter('paramFilter') as string) || '*';
-			if (paramFilter === '*') {
-				addressFilter = '/avatar/parameters/*';
-			} else {
-				matchExact = `/avatar/parameters/${paramFilter}`;
-			}
+			addressFilter = `/avatar/parameters/${paramFilter}`;
 		} else if (filterMode === 'custom') {
 			addressFilter = (this.getNodeParameter('addressFilter') as string) || '';
 		}

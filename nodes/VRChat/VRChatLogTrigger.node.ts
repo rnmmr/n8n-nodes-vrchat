@@ -50,6 +50,7 @@ function parseLine(line: string): ParsedEvent | null {
         if (idx < 0) return null;
         const info = parseUserInfo(body.substring(idx + 15));
         if (!info.displayName && !info.userId) return null;
+        if (info.displayName.startsWith('/ player=')) return null;
         return { type: 'player-joined', timestamp, data: info };
     }
 
@@ -60,6 +61,7 @@ function parseLine(line: string): ParsedEvent | null {
         if (idx < 0) return null;
         const info = parseUserInfo(body.substring(idx + 13));
         if (!info.displayName && !info.userId) return null;
+        if (info.displayName.startsWith('/ player=')) return null;
         return { type: 'player-left', timestamp, data: info };
     }
 
@@ -123,15 +125,10 @@ export class VRChatLogTrigger implements INodeType {
         subtitle: '={{$parameter["eventTypes"].toString()}}',
         inputs: [],
         outputs: ['main'],
+        credentials: [
+            { name: 'VRChatApi', required: false },
+        ],
         properties: [
-            {
-                displayName: 'Log Directory',
-                name: 'logDir',
-                type: 'string',
-                default: '',
-                placeholder: 'Leave empty for auto-detect (%LocalAppData%Low\\VRChat\\VRChat\\)',
-                description: 'Path to VRChat log directory. Leave empty to auto-detect.',
-            },
             {
                 displayName: 'Event Types',
                 name: 'eventTypes',
@@ -157,14 +154,20 @@ export class VRChatLogTrigger implements INodeType {
     };
 
     async trigger(this: ITriggerFunctions): Promise<ITriggerResponse> {
-        let logDir = (this.getNodeParameter('logDir', '') as string).trim();
         const eventTypes = this.getNodeParameter('eventTypes', []) as string[];
         const pollInterval = this.getNodeParameter('pollInterval', 1000) as number;
 
-        // Auto-detect log directory
+        // Resolve log directory: credential → auto-detect
+        let logDir = '';
+        try {
+            const creds = await this.getCredentials('VRChatApi');
+            logDir = ((creds?.logDirectory as string) || '').trim();
+        } catch {
+            // credential not configured, fall through
+        }
         if (!logDir) {
-            const localAppData = process.env.LOCALAPPDATA || '';
-            logDir = path.join(localAppData, 'Low', 'VRChat', 'VRChat');
+            const userProfile = process.env.USERPROFILE || '';
+            logDir = path.join(userProfile, 'AppData', 'LocalLow', 'VRChat', 'VRChat');
         }
 
         if (!fs.existsSync(logDir)) {

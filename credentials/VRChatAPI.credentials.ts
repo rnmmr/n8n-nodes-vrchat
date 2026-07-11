@@ -22,6 +22,14 @@ export class VRChatApi implements ICredentialType {
 			default: '',
 			placeholder: 'authcookie_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
 		},
+		{
+			displayName: 'VRChat Log Directory',
+			name: 'logDirectory',
+			type: 'string',
+			default: '',
+			placeholder: '留空自动检测 (%USERPROFILE%\\AppData\\LocalLow\\VRChat\\VRChat)',
+			description: 'VRChat 日志文件夹路径，供日志 Trigger 和 Analyzer 使用。留空则自动检测。',
+		},
 //		{
 //			displayName: 'Cookie Expires At',
 //			name: 'cookieExpiresAt',

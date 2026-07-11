@@ -23,7 +23,14 @@ export type OscValue = number | string | boolean | null | Buffer;
 
 function readString(buf: Buffer, offset: number): [string, number] {
 	const end = buf.indexOf(0, offset);
-	const str = buf.toString('utf8', offset, end);
+	let str = buf.toString('utf8', offset, end);
+	// Decode literal \uXXXX escape sequences (VRChat may send Chinese
+	// characters as \uXXXX instead of raw UTF-8 bytes in OSC strings)
+	if (str.includes('\\u')) {
+		str = str.replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) =>
+			String.fromCodePoint(parseInt(hex, 16)),
+		);
+	}
 	const next = (end + 4) & ~3; // pad to 4-byte boundary
 	return [str, next];
 }

@@ -46,7 +46,7 @@
 		]
 	},
 	"devDependencies": {
-		"@n8n/node-cli": "*",
+		"@n8n/node-cli": "^0.38.8",
 		"@types/ws": "^8.18.1",
 		"cross-env": "^10.1.0",
 		"eslint": "9.32.0",
