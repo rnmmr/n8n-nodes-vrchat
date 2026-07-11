@@ -1,9 +1,10 @@
-/* eslint-disable @n8n/community-nodes/no-restricted-imports */
+/* eslint-disable @n8n/community-nodes/require-continue-on-fail */
 import {
 	IExecuteFunctions,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	NodeConnectionTypes,
 	NodeOperationError,
 } from 'n8n-workflow';
 import * as dgram from 'dgram';
@@ -72,8 +73,8 @@ export class VrchatOscSend implements INodeType {
 			name: 'OSC Send',
 		},
 		subtitle: '={{ $parameter["mode"] === "custom" ? $parameter["address"] : $parameter["preset"] }}',
-		inputs: ['main'],
-		outputs: ['main'],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		usableAsTool: true,
 		properties: [
 			{

@@ -1,8 +1,10 @@
 /* eslint-disable n8n-nodes-base/node-filename-against-convention */
+/* eslint-disable @n8n/community-nodes/node-filename-against-convention */
 
 import {
 	INodeType,
 	INodeTypeDescription,
+	NodeConnectionTypes,
 } from 'n8n-workflow';
 import { updateinfo } from './updateinfo';
 
@@ -18,11 +20,11 @@ export class VRChat implements INodeType {
 		defaults: {
 			name: 'VRChat',
 		},
-		inputs: ['main'],
-		outputs: ['main'],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
-				name: 'VRChatApi',
+				name: 'vRChatApi',
 				required: true,
 			},
 		],

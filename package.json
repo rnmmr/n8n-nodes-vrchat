@@ -1,63 +1,47 @@
 {
-	"name": "n8n-nodes-vrchat",
-	"version": "1.2.0",
-	"description": "n8n community node for interacting with the VRChat API.",
-	"license": "MIT",
-	"homepage": "",
-	"keywords": [
-		"n8n-community-node-package"
-	],
-	"author": {
-		"name": "mmr",
-		"email": "a2356960576@163.com"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/rnmmr/n8n-nodes-vrchat.git"
-	},
-	"scripts": {
-		"build": "n8n-node build",
-		"build:watch": "tsc --watch",
-		"dev": "n8n-node dev",
-		"dev:debug": "cross-env N8N_LOG_LEVEL=debug n8n-node dev",
-		"lint": "n8n-node lint",
-		"lint:fix": "n8n-node lint --fix",
-		"release": "n8n-node release",
-		"prepublishOnly": "n8n-node prerelease"
-	},
-	"files": [
-		"dist",
-		"nodes",
-		"credentials"
-	],
-	"n8n": {
-		"n8nNodesApiVersion": 1,
-		"strict": true,
-		"credentials": [
-			"dist/credentials/VRChatApi.credentials.js"
-		],
-		"nodes": [
-			"dist/nodes/VRChat/VRChat.node.js",
-			"dist/nodes/VRChat/VRChatTrigger.node.js",
-			"dist/nodes/VRChat/VRChatLogTrigger.node.js",
-			"dist/nodes/VRChat/VRChatLogAnalyzer.node.js",
-			"dist/nodes/OSC/VrchatOscTrigger.node.js",
-			"dist/nodes/OSC/VrchatOscSend.node.js"
-		]
-	},
-	"devDependencies": {
-		"@n8n/node-cli": "^0.38.8",
-		"@types/ws": "^8.18.1",
-		"cross-env": "^10.1.0",
-		"eslint": "9.32.0",
-		"prettier": "3.6.2",
-		"release-it": "^19.0.4",
-		"typescript": "5.9.2"
-	},
-	"peerDependencies": {
-		"n8n-workflow": "*"
-	},
-	"dependencies": {
-		"ws": "^8.19.0"
-	}
+  "name": "n8n-nodes-vrchat",
+  "version": "1.2.0",
+  "description": "n8n community node for interacting with the VRChat API.",
+  "license": "MIT",
+  "homepage": "",
+  "keywords": ["n8n-community-node-package"],
+  "author": { "name": "mmr", "email": "a2356960576@163.com" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rnmmr/n8n-nodes-vrchat.git"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "dev:debug": "cross-env N8N_LOG_LEVEL=debug n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease"
+  },
+  "files": ["dist", "nodes", "credentials"],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": false,
+    "credentials": ["dist/credentials/VRChatApi.credentials.js"],
+    "nodes": [
+      "dist/nodes/VRChat/VRChat.node.js",
+      "dist/nodes/VRChat/VRChatTrigger.node.js",
+      "dist/nodes/VRChat/VRChatLogTrigger.node.js",
+      "dist/nodes/VRChat/VRChatLogAnalyzer.node.js",
+      "dist/nodes/OSC/VrchatOscTrigger.node.js",
+      "dist/nodes/OSC/VrchatOscSend.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "^0.38.8",
+    "@types/ws": "^8.18.1",
+    "cross-env": "^10.1.0",
+    "eslint": "9.32.0",
+    "prettier": "3.6.2",
+    "release-it": "^19.0.4",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": { "n8n-workflow": "*" }
 }

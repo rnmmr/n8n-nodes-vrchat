@@ -1,5 +1,5 @@
 /* eslint-disable @n8n/community-nodes/icon-validation */
-/* eslint-disable n8n-nodes-base/cred-class-field-name-uppercase-first-char */
+ 
 import {
 	ICredentialType,
 	INodeProperties,
@@ -8,7 +8,7 @@ import {
 } from 'n8n-workflow';
 
 export class VRChatApi implements ICredentialType {
-	name = 'VRChatApi';
+	name = 'vRChatApi';
 	displayName = 'VRChat API';
 	icon: ICredentialType['icon'] = 'file:../../icons/vrchat.svg';
 	// Uses the link to this tutorial as an example

@@ -1,5 +1,6 @@
 /* eslint-disable n8n-nodes-base/node-filename-against-convention */
-/* eslint-disable @n8n/community-nodes/no-restricted-imports */
+/* eslint-disable @n8n/community-nodes/node-filename-against-convention */
+/* eslint-disable @n8n/community-nodes/require-continue-on-fail */
 import {
     INodeType,
     INodeTypeDescription,
@@ -7,6 +8,7 @@ import {
     INodeExecutionData,
     INodeProperties,
     IDataObject,
+    NodeConnectionTypes,
     NodeOperationError,
 } from 'n8n-workflow';
 import * as fs from 'fs';
@@ -269,10 +271,10 @@ export class VRChatLogAnalyzer implements INodeType {
         subtitle: '={{$parameter["output"]}}',
         description: 'Analyze VRChat log file to get current room state, player list, and video info.',
         defaults: { name: 'VRChat Log Analyzer' },
-        inputs: ['main'],
-        outputs: ['main'],
+        inputs: [NodeConnectionTypes.Main],
+        outputs: [NodeConnectionTypes.Main],
         credentials: [
-            { name: 'VRChatApi', required: false },
+            { name: 'vRChatApi', required: false },
         ],
         properties: [
             {
@@ -280,17 +282,18 @@ export class VRChatLogAnalyzer implements INodeType {
                 name: 'output',
                 type: 'options',
                 options: [
+                    { name: 'Activity Log', value: 'activity' },
+                    { name: 'Current Video', value: 'video' },
                     { name: 'Full Snapshot', value: 'snapshot' },
                     { name: 'Player List', value: 'players' },
-                    { name: 'Current Video', value: 'video' },
                     { name: 'Room Info', value: 'room' },
-                    { name: 'Activity Log', value: 'activity' },
                     { name: 'Unique Players (Historical)', value: 'uniquePlayers' },
                 ],
                 default: 'snapshot',
                 description: 'What data to output',
             },
         ] as INodeProperties[],
+		usableAsTool: true,
     };
 
     async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {

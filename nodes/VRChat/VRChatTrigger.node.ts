@@ -1,6 +1,6 @@
 /* eslint-disable n8n-nodes-base/node-filename-against-convention */
-/* eslint-disable @n8n/community-nodes/no-restricted-imports */
-import { ITriggerFunctions, INodeType, INodeTypeDescription, ITriggerResponse, NodeOperationError } from 'n8n-workflow';
+/* eslint-disable @n8n/community-nodes/node-filename-against-convention */
+import { ITriggerFunctions, INodeType, INodeTypeDescription, ITriggerResponse, NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
 import WebSocket from 'ws';
 import { setTimeout as nodeSetTimeout, clearTimeout as nodeClearTimeout } from 'timers';
@@ -18,10 +18,10 @@ export class VRChatTrigger implements INodeType {
 		},
 		subtitle: '={{$parameter["wsevent"].toString()}}',
 		inputs: [],
-		outputs: ['main'],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
-				name: 'VRChatApi',
+				name: 'vRChatApi',
 				required: true,
 			},
 		],

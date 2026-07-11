@@ -1,5 +1,7 @@
 /* eslint-disable n8n-nodes-base/node-filename-against-convention */
-/* eslint-disable @n8n/community-nodes/no-restricted-imports */
+/* eslint-disable @n8n/community-nodes/node-filename-against-convention */
+/* eslint-disable @typescript-eslint/no-this-alias */
+/* eslint-disable n8n-nodes-base/node-execute-block-wrong-error-thrown */
 import {
     ITriggerFunctions,
     INodeType,
@@ -7,6 +9,7 @@ import {
     ITriggerResponse,
     INodeProperties,
     IDataObject,
+    NodeConnectionTypes,
 } from 'n8n-workflow';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -124,9 +127,9 @@ export class VRChatLogTrigger implements INodeType {
         defaults: { name: 'VRChat Log Trigger' },
         subtitle: '={{$parameter["eventTypes"].toString()}}',
         inputs: [],
-        outputs: ['main'],
+        outputs: [NodeConnectionTypes.Main],
         credentials: [
-            { name: 'VRChatApi', required: false },
+            { name: 'vRChatApi', required: false },
         ],
         properties: [
             {
@@ -134,23 +137,24 @@ export class VRChatLogTrigger implements INodeType {
                 name: 'eventTypes',
                 type: 'multiOptions',
                 options: [
-                    { name: 'Player Joined', value: 'player-joined' },
-                    { name: 'Player Left', value: 'player-left' },
+                    { name: 'Destination Set', value: 'destination' },
                     { name: 'Entering Room', value: 'entering-room' },
                     { name: 'Joining (Location)', value: 'joining' },
-                    { name: 'Destination Set', value: 'destination' },
+                    { name: 'Player Joined', value: 'player-joined' },
+                    { name: 'Player Left', value: 'player-left' },
                 ],
                 default: ['player-joined', 'player-left', 'entering-room', 'joining'],
                 description: 'Which events to trigger on. Leave empty for all events.',
             },
             {
-                displayName: 'Poll Interval (ms)',
+                displayName: 'Poll Interval (Ms)',
                 name: 'pollInterval',
                 type: 'number',
                 default: 1000,
                 description: 'How often to check for new log lines (milliseconds)',
             },
         ] as INodeProperties[],
+		usableAsTool: true,
     };
 
     async trigger(this: ITriggerFunctions): Promise<ITriggerResponse> {

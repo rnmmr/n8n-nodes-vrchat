@@ -1,10 +1,10 @@
-/* eslint-disable @n8n/community-nodes/no-restricted-imports */
 import {
 	ITriggerFunctions,
 	INodeType,
 	INodeTypeDescription,
 	ITriggerResponse,
 	INodeExecutionData,
+	NodeConnectionTypes,
 } from 'n8n-workflow';
 import * as dgram from 'dgram';
 import { decodeOscPacket, OscBundle, OscMessage } from './OscParser';
@@ -22,7 +22,7 @@ export class VrchatOscTrigger implements INodeType {
 		},
 		subtitle: '=Port {{$parameter["port"]}}',
 		inputs: [],
-		outputs: ['main'],
+		outputs: [NodeConnectionTypes.Main],
 		usableAsTool: true,
 		properties: [
 			{
@@ -146,7 +146,7 @@ export class VrchatOscTrigger implements INodeType {
 		let matchExact = '';
 
 
-		
+
 		if (filterMode === 'avatar-change') {
 			matchExact = '/avatar/change';
 		} else if (filterMode === 'avatar-parameters') {
