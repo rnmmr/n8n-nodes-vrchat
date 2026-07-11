@@ -1,11 +1,16 @@
 {
   "name": "n8n-nodes-vrchat",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "n8n community node for interacting with the VRChat API.",
   "license": "MIT",
   "homepage": "",
-  "keywords": ["n8n-community-node-package"],
-  "author": { "name": "mmr", "email": "a2356960576@163.com" },
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "author": {
+    "name": "mmr",
+    "email": "a2356960576@163.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/rnmmr/n8n-nodes-vrchat.git"
@@ -20,11 +25,17 @@
     "release": "n8n-node release",
     "prepublishOnly": "n8n-node prerelease"
   },
-  "files": ["dist", "nodes", "credentials"],
+  "files": [
+    "dist",
+    "nodes",
+    "credentials"
+  ],
   "n8n": {
     "n8nNodesApiVersion": 1,
     "strict": false,
-    "credentials": ["dist/credentials/VRChatApi.credentials.js"],
+    "credentials": [
+      "dist/credentials/VRChatApi.credentials.js"
+    ],
     "nodes": [
       "dist/nodes/VRChat/VRChat.node.js",
       "dist/nodes/VRChat/VRChatTrigger.node.js",
@@ -43,5 +54,7 @@
     "release-it": "^19.0.4",
     "typescript": "5.9.2"
   },
-  "peerDependencies": { "n8n-workflow": "*" }
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
 }
