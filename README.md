@@ -51,7 +51,7 @@ npm install n8n-nodes-vrchat
 The following VRChat API operations are currently supported:
 目前支持的 VRChat API 功能包括：
 
-### VRChat API
+### VRChat API 节点
 
 - **Get Current User** / 获取当前用户信息
 - **Update Current User** / 修改当前用户信息
@@ -62,9 +62,26 @@ The following VRChat API operations are currently supported:
 - **Accept Friend Request** / 接受好友请求
 - **Get World Info** / 获取世界/实例信息
 
-### VRChat Trigger
+### VRChat Trigger 节点
 
 - **Real-time friend activity trigger** / 实时接收好友动态触发器
+  - WebSocket 直连 VRChat pipeline，支持 8 种事件类型
+  - 可过滤事件类型，支持自动重连
+
+### VRChat Log Trigger 节点
+
+- **实时读取 VRChat 日志文件** / 无需凭证
+  - 监听玩家进出房间、世界切换、目的地设置等事件
+  - 支持 `fs.watch` + 轮询双模式
+  - 自动检测日志路径，也可在 Credential 中指定
+
+### VRChat Log Analyzer 节点
+
+- **日志文件快照分析** / 无需凭证
+  - 尾部快速读取（从最近一次进房开始），无需全量扫描
+  - 输出模式：Full Snapshot / Player List / Current Video / Room Info / Activity Log / Unique Players
+  - 视频 URL 检测（支持当前 VRChat 格式 + 旧版格式）
+  - 可选的 `VRChat Log Directory` 路径配置（在 Credential 中）
 
 ### VRChat OSC Send / OSC 发送
 
@@ -79,6 +96,8 @@ The following VRChat API operations are currently supported:
 
 - **监听VRChat OSC输出** / 默认端口9001
 - **消息过滤**：All Messages / Avatar Change / Avatar Parameters / Custom Address
+  - 通配符 `*` 支持：`VRCEmote`（精确）、`Fiona*`（前缀）、`*Face*`（包含）
+  - 支持中文参数名（VRChat 发送的 `\uXXXX` 转义自动解码）
 - **转发功能**：将OSC消息转发到其他端口，支持多消费者共享同一份数据
 
 ***
@@ -92,6 +111,13 @@ This node uses VRChat authCookie for authentication
 > ⚠️ **请注意，任意泄露任何 Cookie 都是很危险的行为，请勿将 Cookie 泄露给任何人，本项目不会上传任何 Cookie。**
 
 - 本项目不会帮助用户自动登录获取 authCookie，请手动获取 authCookie
+
+### 可选配置
+
+Credential 中还有一个可选字段 **VRChat Log Directory**，供 Log Trigger 和 Log Analyzer 节点使用：
+
+- 留空则自动检测（`%USERPROFILE%\AppData\LocalLow\VRChat\VRChat\`）
+- 填写后可统一管理日志路径，多个工作流共享
 
 ### 如何获取 authCookie
 
@@ -126,9 +152,13 @@ This project is **not affiliated with VRChat Inc.**
 
 ## 📋 ToDo
 
-- [ ] 返回全文搜索
-- [ ] 本地日志 Trigger
+- [ ] 全文搜索
+- [ ] VRChat 群组管理节点
+- [x] 本地日志 Trigger
+- [x] 本地日志 Analyzer
+- [x] 视频播放检测
 - [x] OSC 功能
+- [x] 中文参数名支持
 
 ***
 
