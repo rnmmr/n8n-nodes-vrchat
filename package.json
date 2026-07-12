@@ -56,5 +56,8 @@
   },
   "peerDependencies": {
     "n8n-workflow": "*"
+  },
+  "dependencies": {
+    "ws": "^8.19.0"
   }
 }
