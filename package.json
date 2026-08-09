@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-vrchat",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "n8n community node for interacting with the VRChat API.",
   "license": "MIT",
   "homepage": "",
