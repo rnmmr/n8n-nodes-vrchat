@@ -1,5 +1,8 @@
 # n8n-nodes-vrchat
 
+[![GitHub release](https://img.shields.io/github/v/release/rnmmr/n8n-nodes-vrchat?label=GitHub%20Release&logo=github)](https://github.com/rnmmr/n8n-nodes-vrchat/releases)
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-vrchat?color=cb3837&label=npm&logo=npm)](https://www.npmjs.com/package/n8n-nodes-vrchat)
+
 This is an n8n community node that allows you to use the VRChat API in your n8n workflows.
 这是 一个 n8n 社区节点，可用于在 n8n 工作流中调用 VRChat API。
 
