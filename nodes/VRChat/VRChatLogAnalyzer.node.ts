@@ -302,7 +302,7 @@ export class VRChatLogAnalyzer implements INodeType {
         // Resolve log directory: credential → auto-detect
         let logDir = '';
         try {
-            const creds = await this.getCredentials('VRChatApi');
+            const creds = await this.getCredentials('vRChatApi');
             logDir = ((creds?.logDirectory as string) || '').trim();
         } catch {
             // credential not configured, fall through

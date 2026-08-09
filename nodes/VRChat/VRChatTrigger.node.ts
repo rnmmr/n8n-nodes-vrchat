@@ -55,7 +55,7 @@ export class VRChatTrigger implements INodeType {
 	};
 
 	async trigger(this: ITriggerFunctions): Promise<ITriggerResponse> {
-		const credentials = await this.getCredentials('VRChatApi') as { authcookie?: string };
+		const credentials = await this.getCredentials('vRChatApi') as { authcookie?: string };
 		const cookieValue = credentials.authcookie ? String(credentials.authcookie) : '';
 		
 		// 检测 cookie 格式
