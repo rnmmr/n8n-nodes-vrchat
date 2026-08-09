@@ -95,12 +95,24 @@ export class VRChat implements INodeType {
 						value: 'getMutualFriends',
 						action: 'Get mutual friends with another user',
 						description: 'Get mutual friends with another user',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '=/users/{{$parameter.UserID}}/mutuals/friends',
+							},
+						},
 					},
 					{
 						name: 'Get User Info',
 						value: 'getUserInfo',
 						action: 'Get info about a specific user',
 						description: 'Get info about a specific user',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '=/users/{{$parameter.UserID}}',
+							},
+						},
 					},
 					{
 						name: 'Search Users',
