@@ -1,6 +1,13 @@
 /* eslint-disable n8n-nodes-base/node-filename-against-convention */
 /* eslint-disable @n8n/community-nodes/node-filename-against-convention */
-import { ITriggerFunctions, INodeType, INodeTypeDescription, ITriggerResponse, NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
+import {
+	ITriggerFunctions,
+	INodeType,
+	INodeTypeDescription,
+	ITriggerResponse,
+	NodeConnectionTypes,
+	NodeOperationError,
+} from 'n8n-workflow';
 
 import WebSocket from 'ws';
 import { setTimeout as nodeSetTimeout, clearTimeout as nodeClearTimeout } from 'timers';
@@ -30,14 +37,36 @@ export class VRChatTrigger implements INodeType {
 				displayName: 'Trigger Events',
 				name: 'wsevent',
 				type: 'multiOptions',
-				description: 'Note: Avatar changes also trigger friend-location events, and model information is not included in the data',
+				description:
+					'Note: Avatar changes also trigger friend-location events, and model information is not included in the data',
 				options: [
+					{ name: 'All Events', value: 'all' },
+					{ name: 'Content Refresh', value: 'content-refresh' },
+					{ name: 'Economy Update', value: 'economy-update' },
+					{ name: 'Friend Active', value: 'friend-active' },
+					{ name: 'Friend Add', value: 'friend-add' },
+					{ name: 'Friend Delete', value: 'friend-delete' },
 					{ name: 'Friend Location/Avatar Change', value: 'friend-location' },
 					{ name: 'Friend Offline', value: 'friend-offline' },
 					{ name: 'Friend Online', value: 'friend-online' },
 					{ name: 'Friend Update', value: 'friend-update' },
+					{ name: 'Group Joined', value: 'group-joined' },
+					{ name: 'Group Left', value: 'group-left' },
+					{ name: 'Group Member Updated', value: 'group-member-updated' },
+					{ name: 'Group Role Updated', value: 'group-role-updated' },
+					{ name: 'Instance Queue Joined', value: 'instance-queue-joined' },
+					{ name: 'Instance Queue Ready', value: 'instance-queue-ready' },
+					{ name: 'Notification Hidden', value: 'hide-notification' },
 					{ name: 'Notification Received', value: 'notification' },
+					{ name: 'Notification Response', value: 'response-notification' },
+					{ name: 'Notification Seen', value: 'see-notification' },
+					{ name: 'Notifications Cleared', value: 'clear-notification' },
+					{ name: 'NotificationV2 Deleted', value: 'notification-v2-delete' },
+					{ name: 'NotificationV2 Received', value: 'notification-v2' },
+					{ name: 'NotificationV2 Updated', value: 'notification-v2-update' },
 					{ name: 'Other', value: 'other' },
+					{ name: 'User Badge Assigned', value: 'user-badge-assigned' },
+					{ name: 'User Badge Unassigned', value: 'user-badge-unassigned' },
 					{ name: 'User Location Change', value: 'user-location' },
 					{ name: 'User Update', value: 'user-update' },
 				],
@@ -48,25 +77,30 @@ export class VRChatTrigger implements INodeType {
 				name: 'autoReconnect',
 				type: 'boolean',
 				default: true,
-				description: 'Whether to automatically attempt to reconnect when the WebSocket closes unexpectedly',
+				description:
+					'Whether to automatically attempt to reconnect when the WebSocket closes unexpectedly',
 			},
 		],
 		usableAsTool: true,
 	};
 
 	async trigger(this: ITriggerFunctions): Promise<ITriggerResponse> {
-		const credentials = await this.getCredentials('vRChatApi') as { authcookie?: string };
+		const credentials = (await this.getCredentials('vRChatApi')) as { authcookie?: string };
 		const cookieValue = credentials.authcookie ? String(credentials.authcookie) : '';
-		
+
 		// 检测 cookie 格式
-		const cookieRegex = /^authcookie_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+		const cookieRegex =
+			/^authcookie_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 		if (!cookieValue) {
 			throw new NodeOperationError(this.getNode(), 'Missing authentication cookie');
 		}
 		if (!cookieRegex.test(cookieValue)) {
-			throw new NodeOperationError(this.getNode(), 'Invalid cookie format. Expected: authcookie_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
+			throw new NodeOperationError(
+				this.getNode(),
+				'Invalid cookie format. Expected: authcookie_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+			);
 		}
-		
+
 		const autoReconnect = this.getNodeParameter('autoReconnect') as boolean;
 		const rawWsevent = this.getNodeParameter('wsevent') as unknown;
 		const wsevent = Array.isArray(rawWsevent)
@@ -87,7 +121,7 @@ export class VRChatTrigger implements INodeType {
 			this.logger.debug('Connecting VRChat WebSocket...');
 			ws = new WebSocket('wss://pipeline.vrchat.cloud/?authToken=' + cookieValue, {
 				headers: {
-					'User-Agent': 'n8n-nodes-vrchat/1.0.1',
+					'User-Agent': 'n8n-nodes-vrchat/1.4.0',
 				},
 			});
 

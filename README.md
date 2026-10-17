@@ -58,17 +58,34 @@ The following VRChat API operations are currently supported:
 
 - **Get Current User** / 获取当前用户信息
 - **Update Current User** / 修改当前用户信息
+- **Update Profile** / 更新用户资料（bio、bioLinks、主题、横幅、背景等）
+- **Get Public Profile** / 获取用户公开资料
 - **Search Users** / 搜索玩家
 - **Get User Info** / 获取玩家信息
 - **Get Mutual Friends** / 获取共同好友
-- **Get Notifications** / 获取通知
-- **Accept Friend Request** / 接受好友请求
+- **Friend Management** / 好友管理
+  - Send Friend Request / 发送好友请求
+  - Delete Friend Request / 删除好友请求
+  - Get Friend Status / 查询好友状态
+  - List Friends / 好友列表
+  - Unfriend / 删除好友
+  - Send Boop / 发送 Boop
+- **Notifications** / 通知管理
+  - Get Notifications / 获取通知
+  - Accept Friend Request / 接受好友请求
+  - Mark Notification As Read / 标记通知已读
+  - Delete Notification / 删除通知
+  - Clear All Notifications / 清空全部通知
+  - NotificationV2 增删查 / NotificationV2 列表、删除
+- **Global World Search** / 全局世界搜索（支持关键字、标签、Unity 版本、排序等筛选）
 - **Get World Info** / 获取世界/实例信息
+- **List Active Worlds** / 当前活跃世界列表
+- **List Favorited Worlds** / 收藏世界列表
 
 ### VRChat Trigger 节点
 
 - **Real-time friend activity trigger** / 实时接收好友动态触发器
-  - WebSocket 直连 VRChat pipeline，支持 8 种事件类型
+  - WebSocket 直连 VRChat pipeline，支持 28 种事件类型
   - 可过滤事件类型，支持自动重连
 
 ### VRChat Log Trigger 节点
