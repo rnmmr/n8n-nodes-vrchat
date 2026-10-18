@@ -40,6 +40,7 @@
 #
 # This will lint, build, prompt for a version bump, update the changelog,
 # commit, tag, and push — which triggers this workflow to publish to npm.
+# After publishing, a GitHub Release is also created for the tag.
 
 name: Publish
 
@@ -58,7 +59,8 @@ jobs:
       # Required to mint an OIDC token for npm provenance attestation.
       id-token: write
       # Scoped down from the default (write) for least-privilege publishing.
-      contents: read
+      # contents: read for the npm publish, plus write for creating a GitHub Release.
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -85,3 +87,13 @@ jobs:
           npm run release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        if: ${{ always() }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
